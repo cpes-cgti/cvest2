@@ -32,6 +32,7 @@ Route::get('/admin', 'HomeController@index')->name('admin');
 Route::get('/admin/redacoes/avaliadores', 'CorrectorController@index')->name('corrector.index');
 Route::get('/admin/redacoes/avaliadores/adicionar', 'CorrectorController@create')->name('corrector.create');
 Route::post('/admin/redacoes/avaliadores/adicionar', 'CorrectorController@store')->name('corrector.store');
-Route::get('/admin/redacoes/avaliadores/{id}/ver', 'CorrectorController@show')->name('corrector.show');
+Route::get('/admin/redacoes/avaliadores/{id}/exibir', 'CorrectorController@show')->name('corrector.show');
 Route::get('/admin/redacoes/avaliadores/{id}/modificar', 'CorrectorController@edit')->name('corrector.edit');
 Route::put('/admin/redacoes/avaliadores/{id}/modificar', 'CorrectorController@update')->name('corrector.update');
+Route::delete('/admin/redacoes/avaliadores/{id}/remover', 'CorrectorController@destroy')->name('corrector.destroy');

@@ -20,6 +20,7 @@ class CreateCorrectorsTable extends Migration
             $table->integer('user_id')->unsigned()->unique();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

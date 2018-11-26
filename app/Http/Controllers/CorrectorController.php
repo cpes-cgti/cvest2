@@ -91,6 +91,10 @@ class CorrectorController extends Controller
     public function destroy($id)
     {
         $corrector = Corrector::findOrFail($id);
-        dd($corrector);
+        $deletedRows = $corrector->delete();
+        if ($deletedRows > 0){
+            return redirect()->route('corrector.index');
+        }
+        return redirect()->route('corrector.index')->with('erro', 'Erro ao remover o avaliador.');
     }
 }

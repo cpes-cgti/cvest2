@@ -31,20 +31,10 @@
             @if (session('erro'))
                 <div class="alert alert-error alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-warning"></i> Erro: </h4>
+                    <h4><i class="fas fa-exclamation-circle"></i> Erro: </h4>
                     <p>{{ session('erro') }}</p>
                 </div>
             @endif
-            {{-- Exibir erros --}}
-            {{-- @if ($errors->any())
-                <div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4><i class="icon fa fa-warning"></i> Erro: </h4>
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach 
-            </div>
-            @endif --}}
             {{-- Formulário para adicionar ou modificar avaliadores --}}
             @isset($corrector)
                 <form method="post" action="{{ route('corrector.update', $corrector->id) }}" enctype="multipart/form-data">
