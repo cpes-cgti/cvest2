@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\Cpf;
 use App\Rules\EmailCorrector;
@@ -15,7 +16,7 @@ class CorrectorRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Gate::allows('level2');
     }
 
     /**

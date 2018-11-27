@@ -1689,7 +1689,7 @@ a:focus {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 3px;
 }
-.box .overlay > .fa,
+.box .overlay > .fas,
 .overlay-wrapper .overlay > .fa {
   position: absolute;
   top: 50%;

@@ -13,7 +13,8 @@ class CorrectorController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'can:level2']);
+
     }
     
     public function index()
@@ -37,7 +38,8 @@ class CorrectorController extends Controller
                 $usuario = User::create([
                     'name' => $r->name,
                     'email' => $r->email,
-                    'password' => bcrypt(str_random(10)),
+                    /* 'password' => bcrypt(str_random(10)), */
+                    'password' => bcrypt('123456'),
                 ]);
             } else {
                 $usuario->name = $r->name;

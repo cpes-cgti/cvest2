@@ -117,8 +117,15 @@ return [
             'icon' => 'pen-alt',
             'submenu' => [
                 [
+                    'text' => 'Importar Redações',
+                    'icon' => 'file-import',
+                    'can' => 'level4',
+                    'route'  => 'redaction.import',
+                ],
+                [
                     'text' => 'Avaliadores',
                     'icon' => 'users',
+                    'can' => 'level2',
                     'route'  => 'corrector.index',
                 ],
             ],
