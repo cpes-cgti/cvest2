@@ -109,6 +109,11 @@ class RedactionController extends Controller
         return redirect()->route('redaction.index');
     }
 
+    public function allocate()
+    {
+        return view('redactions.allocate');
+    }
+
     public function get_data($image, $ch, $cv)
     {
         $file = Storage::get($image);

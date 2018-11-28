@@ -31,11 +31,11 @@
 @stop
 
 @section('content_header')
-    <h1>Selecionar redações para correção:</h1>
+    <h1>Distribuir redações para avaliadores:</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin') }}"><i class="fas fa-home"></i></a></li>
         <li><a href="{{ route('redaction.index') }}">Redações</a></li>
-        <li><a href="{{ route('redaction.for_correction') }}">Para Correção</a></li>
+        <li><a href="{{ route('redaction.allocate') }}">Distribuir para avaliadores</a></li>
     </ol>
 @stop
 
@@ -52,25 +52,19 @@
                     <p>{{ session('erro') }}</p>
                 </div>
             @endif
-            <form method="post" action="{{ route('redaction.process_for_correction') }}" enctype="multipart/form-data">
+            
+            <div class="col-md-6">
+                
+            </div>
+            <div class="col-md-6">
+                
+            </div>
+                
+            <form method="post" action="#" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <div class="form-group {{ $errors->has('arquivo') ? 'has-error' : '' }}">
-                    <label for="arquivo">Selecione o arquivo com as redações que devem ser corrigidas:</label>
-                    <input type="file" id="arquivo" name="arquivo" accept=".csv" aria-describedby="arquivoAjuda">
-                    @if ($errors->has('arquivo'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('arquivo') }}</strong>
-                        </span>
-                    @endif
-                    <small id="arquivoAjuda" class="form-text text-muted">
-                        <br>
-                        O arquivo deve ser extraído do site da CVEST e deve conter apenas
-                        os números de inscrição dos candidatos com redações selecionadas para 
-                        correção.
-                    </small>   
-                </div>
+                
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-success btn-block"><i class="fas fa-tasks"></i> Processar arquivo</button>
+                    <button type="submit" class="btn btn-success btn-block"><i class="fas fa-project-diagram"></i> Distribuir redações</button>
                 </div>
             </form>
         </div>

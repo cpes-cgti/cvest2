@@ -136,6 +136,12 @@ return [
             'can' => 'level2',
             'route'  => 'redaction.index',
         ],
+        [
+            'text' => 'Distribuir redações',
+            'icon' => 'share-square',
+            'can' => 'level2',
+            'route'  => 'redaction.allocate',
+        ],
     ],
 
     /*
