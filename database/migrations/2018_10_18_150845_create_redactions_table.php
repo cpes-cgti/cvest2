@@ -16,6 +16,11 @@ class CreateRedactionsTable extends Migration
         Schema::create('redactions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('entry')->unsigned()->unique();
+            $table->string('file');
+            $table->enum('status',
+                ['Digitalizada','Para correção','Corrigida (1x)', 'Corrigida (concluído)', 'Inconsistência', ]
+            )->default('Digitalizada');
+            $table->double('final_score', 5, 2)->nullable();
             $table->integer('lot_id')->unsigned()->nullable();
             $table->foreign('lot_id')->references('id')->on('lots')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();

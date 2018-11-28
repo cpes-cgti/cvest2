@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Models\Redaction;
 
 
 class RedactionController extends Controller
@@ -22,6 +24,23 @@ class RedactionController extends Controller
     public function process_import()
     {
         sleep(5);
+        $files = Storage::files();
+        $extensions = array("JPG", "PNG", "GIF");
+        /* dd($files, $extensions); */
+        foreach ($files as $f) {
+            $file = $f;
+            list($entry, $ext) = explode(".", $file);
+            if (in_array(strtoupper($ext), $extensions)){
+                $redaction = Redaction::where('entry', $entry)->first();
+                if ($redaction == null){
+                    Redaction::create([
+                        'entry' => $entry,
+                        'file' => $file,
+                    ]);
+                }
+            }
+        }
+        dd($files, $extensions);
         return "Teste";
     }
 

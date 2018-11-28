@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Redaction extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+        'entry', 'file',
+    ];
+
+
+
 }
