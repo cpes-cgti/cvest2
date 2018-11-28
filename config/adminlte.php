@@ -113,22 +113,28 @@ return [
 
     'menu' => [
         [
+            'text' => 'Avaliadores',
+            'icon' => 'users',
+            'can' => 'level2',
+            'route'  => 'corrector.index',
+        ],
+        [
+            'text' => 'Importar Redações',
+            'icon' => 'file-import',
+            'can' => 'level4',
+            'route'  => 'redaction.import',
+        ],
+        [
+            'text' => 'Marcar para Correção',
+            'icon' => 'clipboard-check',
+            'can' => 'level4',
+            'route'  => 'redaction.for_correction',
+        ],
+        [
             'text' => 'Redações',
-            'icon' => 'pen-alt',
-            'submenu' => [
-                [
-                    'text' => 'Importar Redações',
-                    'icon' => 'file-import',
-                    'can' => 'level4',
-                    'route'  => 'redaction.import',
-                ],
-                [
-                    'text' => 'Avaliadores',
-                    'icon' => 'users',
-                    'can' => 'level2',
-                    'route'  => 'corrector.index',
-                ],
-            ],
+            'icon' => 'file-signature',
+            'can' => 'level2',
+            'route'  => 'redaction.index',
         ],
     ],
 

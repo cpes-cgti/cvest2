@@ -8,9 +8,8 @@
     <h1>Dados do Avaliador</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin') }}"><i class="fas fa-home"></i></a></li>
-        <li><a href="#">Redações</a></li>
         <li><a href="{{ route('corrector.index') }}">Avaliadores</a></li>
-        <li><a href="{{ route('corrector.show', $corrector->id) }}">Ver</a></li>
+        <li><a href="{{ route('corrector.show', $corrector->id) }}">Exibir</a></li>
     </ol>
 @stop
 

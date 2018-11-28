@@ -31,11 +31,11 @@
 @stop
 
 @section('content_header')
-    <h1>Importar redações</h1>
+    <h1>Selecionar redações para correção:</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin') }}"><i class="fas fa-home"></i></a></li>
         <li><a href="{{ route('redaction.index') }}">Redações</a></li>
-        <li><a href="{{ route('redaction.import') }}">Importar</a></li>
+        <li><a href="{{ route('redaction.for_correction') }}">Para Correção</a></li>
     </ol>
 @stop
 
@@ -44,7 +44,7 @@
         <div class="box-header">
             
         </div>
-        <div class="box-body" style="height: 70vh">
+        <div class="box-body" style="min-height: 70vh">
             @if (session('erro'))
                 <div class="alert alert-error alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -52,14 +52,25 @@
                     <p>{{ session('erro') }}</p>
                 </div>
             @endif
-            <form method="post" action="{{ route('redaction.process_import') }}" enctype="multipart/form-data">
+            <form method="post" action="{{ route('redaction.process_for_correction') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <div class="form-group">
-                    <label>Importar redações:</label>
-                    <p>Antes de realizar este procedimento é necessário ter transferido todas as imagens das redações digitalizadas para a pasta de <b>Storage</b> da aplicação.</p>
+                <div class="form-group {{ $errors->has('arquivo') ? 'has-error' : '' }}">
+                    <label for="arquivo">Selecione o arquivo com as redações que devem ser corrigidas:</label>
+                    <input type="file" id="arquivo" name="arquivo" accept=".csv" aria-describedby="arquivoAjuda">
+                    @if ($errors->has('arquivo'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('arquivo') }}</strong>
+                        </span>
+                    @endif
+                    <small id="arquivoAjuda" class="form-text text-muted">
+                        <br>
+                        O arquivo deve ser extraído do site da CVEST e deve conter apenas
+                        os números de inscrição dos candidatos com redações selecionadas para 
+                        correção.
+                    </small>   
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-success btn-block"><i class="fas fa-file-import"></i> Importar</button>
+                    <button type="submit" class="btn btn-success btn-block"><i class="fas fa-file-import"></i> Processar arquivo</button>
                 </div>
             </form>
         </div>

@@ -5,17 +5,17 @@
 @stop
 
 @section('content_header')
-    <h1>Avaliadores</h1>
+    <h1>Redações</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin') }}"><i class="fas fa-home"></i></a></li>
-        <li><a href="{{ route('corrector.index') }}">Avaliadores</a></li>
+        <li><a href="{{ route('redaction.index') }}">Redações</a></li>
     </ol>
 @stop
 
 @section('content')
     <div class="box">
         <div class="box-header">
-            <a href="{{ route('corrector.create') }}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Adicionar Avaliador</a>
+            {{-- <a href="{{ route('corrector.create') }}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Adicionar Avaliador</a> --}}
         </div>
         <div class="box-body" style="min-height: 70vh">
             @if (session('erro'))
@@ -25,57 +25,53 @@
                     <p>{{ session('erro') }}</p>
                 </div>
             @endif
-            <table id="tb_avaliadores" class="table table-striped">
+            <table id="tb_redacoes" class="table table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>CPF</th>
-                        <th>SIAPE</th>
-                        <th>NOME</th>
-                        <th>EMAIL</th>
+                        <th>INSCRIÇÃO</th>
+                        <th>STATUS</th>
+                        <th>MÉDIA</th>
+                        <th>LOTE</th>
                         <th>AÇÕES</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($avaliadores as $a)
+                {{-- <tbody>
+                    @foreach ($redacoes as $r)
                     <tr>
-                        <td>{{$a->id}}</td>
-                        <td>{{$a->cpf}}</td>
-                        <td>{{$a->siape}}</td>
-                        <td>{{$a->user->name}}</td>
-                        <td>{{$a->user->email}}</td>
+                        <td>{{$r->id}}</td>
+                        <td>{{$r->entry}}</td>
+                        <td>{{$r->status}}</td>
+                        <td>{{$r->final_score}}</td>
+                        <td>{{$r->lot_id}}</td>
                         <td>
-                            <form action="{{ route('corrector.destroy', $a->id) }}" class="form-inline" method="POST" >
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE')}}
+                            <form class="form-inline" >
                                 <div class="btn-group">
-                                    <a href="{{ route('corrector.show', $a->id) }}" class="btn btn-default btn-sm" style="color:black"><i class="far fa-eye"></i></a>
-                                    <a href="{{ route('corrector.edit', $a->id) }}" class="btn btn-default btn-sm" style="color: darkgreen"><i class="fas fa-user-edit"></i></a>
-                                    <button type="submit" class="btn btn-default btn-sm form-delete"><i class="fas fa-trash-alt" style="color: darkred"></i></button>
+                                    <a href="{{ route('redaction.show', $r->id) }}" class="btn btn-default btn-sm" style="color:black"><i class="far fa-eye"></i></a>
                                 </div>
                             </form>
                         </td>
                     </tr>
                     @endforeach 
-                </tbody>
+                </tbody> --}}
             </table>
-            {{-- {!! $avaliadores->links() !!} --}}
+            {{-- {!! $redacoes->links() !!} --}}
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="dialog_del">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="dialog_exibir">
+        <div class="modal-dialog" role="document" style="width:80vw;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Remover o avaliador?</h4>
+                    <h4 class="modal-title">Exibir Redação</h4>
                 </div>
                 <div class="modal-body">
-                <p>Tem certeza que deseja remover o avaliador?</p>
+                
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="delete-btn">Confirmar</button>
+                    {{-- <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="delete-btn">Confirmar</button> --}}
                 </div>
             </div>
         </div>
@@ -86,7 +82,17 @@
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script>
         $(document).ready( function () {
-            $('#tb_avaliadores').DataTable({
+            $('#tb_redacoes').DataTable({
+                serverSide: true,
+                ajax: "{{ route('redaction.datatables') }}",
+                columns: [
+                    { name: 'id' },
+                    { name: 'entry' },
+                    { name: 'status' },
+                    { name: 'final_score' },
+                    { name: 'lot_id' },
+                    { name: 'action', orderable: false, searchable: false }
+                ],
                 "language": {
                     "decimal":        "",
                     "emptyTable":     "Não existem registros para exibir.",
@@ -112,14 +118,13 @@
                     }
                 }
             });
-        } );
-        $('#tb_avaliadores').on('click', '.form-delete', function(e){
-            e.preventDefault();
-            var $form = $(this).parents("form");
-            $('#dialog_del').modal()
-                .on('click', '#delete-btn', function(){
-                    $form.submit();
+            $("#tb_redacoes").on("click", ".btn-exibir", function() {
+                var key = $(this).attr('chave');
+                $("#dialog_exibir .modal-body").load(key, function(){
+                    $("#dialog_exibir").modal({show:true});
                 });
+            });
         });
+
     </script>
 @stop

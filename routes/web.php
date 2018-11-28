@@ -45,14 +45,22 @@ Route::get('/senha/recuperar/{token}', 'Auth\ResetPasswordController@showResetFo
 
 /* Rotas da área administrativa */
 Route::get('/admin', 'HomeController@index')->name('admin');
-Route::get('/admin/redacoes/importar', 'RedactionController@import')->name('redaction.import');
-Route::post('/admin/redacoes/importar', 'RedactionController@process_import')->name('redaction.process_import');
+Route::get('/admin/importar', 'RedactionController@import')->name('redaction.import');
+Route::post('/admin/importar', 'RedactionController@process_import')->name('redaction.process_import');
+Route::get('/admin/selecionar', 'RedactionController@for_correction')->name('redaction.for_correction');
+Route::post('/admin/selecionar', 'RedactionController@process_for_correction')->name('redaction.process_for_correction');
 
 /* Rotas do CRUD de avaliadores */
-Route::get('/admin/redacoes/avaliadores', 'CorrectorController@index')->name('corrector.index');
-Route::get('/admin/redacoes/avaliadores/adicionar', 'CorrectorController@create')->name('corrector.create');
-Route::post('/admin/redacoes/avaliadores/adicionar', 'CorrectorController@store')->name('corrector.store');
-Route::get('/admin/redacoes/avaliadores/{id}/exibir', 'CorrectorController@show')->name('corrector.show');
-Route::get('/admin/redacoes/avaliadores/{id}/modificar', 'CorrectorController@edit')->name('corrector.edit');
-Route::put('/admin/redacoes/avaliadores/{id}/modificar', 'CorrectorController@update')->name('corrector.update');
-Route::delete('/admin/redacoes/avaliadores/{id}/remover', 'CorrectorController@destroy')->name('corrector.destroy');
+Route::get('/admin/avaliadores', 'CorrectorController@index')->name('corrector.index');
+Route::get('/admin/avaliadores/adicionar', 'CorrectorController@create')->name('corrector.create');
+Route::post('/admin/avaliadores/adicionar', 'CorrectorController@store')->name('corrector.store');
+Route::get('/admin/avaliadores/exibir/{id}', 'CorrectorController@show')->name('corrector.show');
+Route::get('/admin/avaliadores/modificar/{id}', 'CorrectorController@edit')->name('corrector.edit');
+Route::put('/admin/avaliadores/modificar/{id}', 'CorrectorController@update')->name('corrector.update');
+Route::delete('/admin/avaliadores/remover/{id}', 'CorrectorController@destroy')->name('corrector.destroy');
+
+/* Rotas do CRUD de redações */
+Route::get('/admin/redacoes/datatables', 'RedactionController@datatables')->name('redaction.datatables');
+Route::get('/admin/redacoes', 'RedactionController@index')->name('redaction.index');
+Route::get('/admin/redacoes/exibir/{id}', 'RedactionController@show')->name('redaction.show');
+Route::get('/admin/redacoes/exibir_completo/{id}', 'RedactionController@show_admin')->name('redaction.show_admin');

@@ -12,7 +12,6 @@
     @endisset
     <ol class="breadcrumb">
         <li><a href="{{ route('admin') }}"><i class="fas fa-home"></i></a></li>
-        <li><a href="#">Redações</a></li>
         <li><a href="{{ route('corrector.index') }}">Avaliadores</a></li>
         @isset($corrector)
             <li><a href="{{ route('corrector.edit', $corrector->id) }}">Modificar</a></li>
