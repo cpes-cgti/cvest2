@@ -32,7 +32,6 @@
                         <th>INSCRIÇÃO</th>
                         <th>STATUS</th>
                         <th>MÉDIA</th>
-                        <th>LOTE</th>
                         <th>AÇÕES</th>
                     </tr>
                 </thead>
@@ -90,7 +89,6 @@
                     { name: 'entry' },
                     { name: 'status' },
                     { name: 'final_score' },
-                    { name: 'lot_id' },
                     { name: 'action', orderable: false, searchable: false }
                 ],
                 "language": {

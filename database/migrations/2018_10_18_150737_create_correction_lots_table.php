@@ -15,19 +15,24 @@ class CreateCorrectionLotsTable extends Migration
     {
         Schema::create('lots', function (Blueprint $table) {
             $table->increments('id');
+            $table->enum('status',
+                ['Criado','Correção em andamento','Finalizado', ]
+            )->default('Criado');
+            $table->integer('corrector_id')->unsigned()->nullable();
+            $table->foreign('corrector_id')->references('id')->on('correctors')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
             $table->softDeletes();
         });
 
         // Tabela Pivô - Avaliadores X Lotes
-        Schema::create('correctors_lots', function (Blueprint $table) {
+        /* Schema::create('corrector_lot', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corrector_id')->unsigned();
             $table->integer('lot_id')->unsigned();
             $table->timestamps();
             $table->foreign('corrector_id')->references('id')->on('correctors')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('lot_id')->references('id')->on('lots')->onUpdate('cascade')->onDelete('restrict');
-        });
+        }); */
     }
 
     /**
@@ -37,11 +42,15 @@ class CreateCorrectionLotsTable extends Migration
      */
     public function down()
     {
-        Schema::table('correctors_lots', function (Blueprint $table){
+        /* Schema::table('corrector_lot', function (Blueprint $table){
             $table->dropForeign(['corrector_id']);
             $table->dropForeign(['lot_id']);
         });
-        Schema::dropIfExists('correctors_lots');
+        Schema::dropIfExists('corrector_lot'); */
+
+        Schema::table('lots', function (Blueprint $table){
+            $table->dropForeign(['corrector_id']);
+        });
 
         Schema::dropIfExists('lots');
     }

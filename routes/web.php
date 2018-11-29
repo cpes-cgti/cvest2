@@ -49,6 +49,8 @@ Route::get('/admin/importar', 'RedactionController@import')->name('redaction.imp
 Route::post('/admin/importar', 'RedactionController@process_import')->name('redaction.process_import');
 Route::get('/admin/selecionar', 'RedactionController@for_correction')->name('redaction.for_correction');
 Route::post('/admin/selecionar', 'RedactionController@process_for_correction')->name('redaction.process_for_correction');
+Route::get('/admin/distribuir_redacoes', 'RedactionController@allocate')->name('redaction.allocate');
+Route::post('/admin/distribuir_redacoes', 'RedactionController@process_allocate')->name('redaction.process_allocate');
 
 /* Rotas do CRUD de avaliadores */
 Route::get('/admin/avaliadores', 'CorrectorController@index')->name('corrector.index');
@@ -64,4 +66,3 @@ Route::get('/admin/redacoes/datatables', 'RedactionController@datatables')->name
 Route::get('/admin/redacoes', 'RedactionController@index')->name('redaction.index');
 Route::get('/admin/redacoes/exibir/{id}', 'RedactionController@show')->name('redaction.show');
 Route::get('/admin/redacoes/exibir_completo/{id}', 'RedactionController@show_admin')->name('redaction.show_admin');
-Route::get('/admin/distribuir_redacoes', 'RedactionController@allocate')->name('redaction.allocate');

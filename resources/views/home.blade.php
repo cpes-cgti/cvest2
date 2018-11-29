@@ -8,10 +8,76 @@
 
 @section('content')
     <div class="row">
+            <div class="col-md-6">
+                {{-- Caixa do avaliador --}}
+                @if ($isCorrector)
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Prezado(a) avaliador(a):</h3>
+                        </div>
+                        <div class="box-body">
+                            <h5>Redações selecionadas para correção: <b>100</b></h5>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                            <h5>Redações corrigidas: <b>100</b></h5>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @if (\Auth::user()->profile > 1)
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Prezado(a) coordenador(a):</h3>
+                        </div>
+                        <div class="box-body">
+                            <h5>Redações selecionadas para correção: <b>100</b></h5>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                            <h5>Redações corrigidas: <b>100</b></h5>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @if (\Auth::user()->profile > 3)
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Prezado(a) administrador(a) do sistema:</h3>
+                        </div>
+                        <div class="box-body">
+                            <h5>Redações selecionadas para correção: <b>100</b></h5>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                            <h5>Redações corrigidas: <b>100</b></h5>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
         <div class="col-md-6">
-            <div class="box box-danger">
+            <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Redações</h3>
+                    <h3 class="box-title">Estatíscas gerais:</h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -32,56 +98,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box bg-blue">
-                <div class="inner">
-                    <h3>4</h3>         
-                    Avaliadores<br>&nbsp;
-                </div>
-                <div class="icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <a href="#" class="small-box-footer"><i class="fas fa-list-ul"></i> Detalhes</a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box bg-red">
-                <div class="inner">
-                    <h3>0</h3>         
-                    Redações para correção<br>&nbsp;
-                </div>
-                <div class="icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <a href="#" class="small-box-footer"><i class="fas fa-list-ul"></i> Detalhes</a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box bg-yellow">
-                <div class="inner">
-                    <h3>0</h3>         
-                    Redações Corrigidas<br>(1 avaliador)
-                </div>
-                <div class="icon">
-                    <i class="fas fa-clipboard-check"></i>
-                </div>
-                <a href="#" class="small-box-footer"><i class="fas fa-list-ul"></i> Detalhes</a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="small-box bg-green">
-                <div class="inner">
-                    <h3>0</h3>         
-                    Redações corrigidas<br>(2 avaliadores)
-                </div>
-                <div class="icon">
-                    <i class="fas fa-check-double"></i>
-                </div>
-                <a href="#" class="small-box-footer"><i class="fas fa-list-ul"></i> Detalhes</a>
-            </div>
-        </div>
-    </div>
+    
 @stop
 
 @section('js')

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Models\Corrector;
 use App\Models\Redaction;
+use App\Models\Lot;
 use Freshbitsweb\Laratables\Laratables;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +17,14 @@ class RedactionController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['auth', 'can:level4'])->only(['import', 'process_import', 'for_correction', 'process_for_correction']);
-        $this->middleware(['auth', 'can:level2'])->except(['import', 'process_import', 'for_correction', 'process_for_correction']);
+        $array = array(
+            'import', 
+            'process_import', 
+            'for_correction', 
+            'process_for_correction',
+        );
+        $this->middleware(['auth', 'can:level4'])->only($array);
+        $this->middleware(['auth', 'can:level2'])->except($array);
     }
 
 
@@ -112,6 +120,57 @@ class RedactionController extends Controller
     public function allocate()
     {
         return view('redactions.allocate');
+    }
+    
+    public function process_allocate()
+    {
+        DB::beginTransaction();
+        try{
+            //Lista e conta Avaliadores e Redações
+            $correctors = Corrector::all();
+            $qtde_correctors = $correctors->count();
+            if ($qtde_correctors < 2){
+                return redirect()->route('redaction.allocate')
+                    ->with('erro', 'Não foi possível distribuir as redações. É necessário no mínimo 2 avaliadores cadastrados.');
+            }
+            $redactions = Redaction::where('status', 'Para correção')->get();
+            $qtde_redactions = $redactions->count();
+            //Calcula o tamanho ideal para os lotes (Entre 30 e 60)
+            $maxLot = ceil($qtde_redactions/$qtde_correctors);
+            while ($maxLot > 59){
+                $maxLot = ceil($maxLot/2);
+            }
+            //Calcula a quantidade de lotes e cria os lotes e atribui para um avaliador
+            $qtdeLots = ceil($qtde_redactions / $maxLot);
+            $a = 0;
+            for ($i=0; $i<$qtdeLots; $i++){
+                $lot = Lot::create([
+                    'corrector_id' => $correctors[$a]->id,
+                ]);
+                $a++;
+                if($a == $qtde_correctors ) $a = 0;
+                $redactions_lot = Redaction::has('lots', 0)->where('status', 'Para correção')->limit($maxLot)->get();
+                foreach ($redactions_lot as $r) {
+                    $r->lots()->attach($lot->id);
+                }
+            }
+
+            /* $lots = Lot::all();
+            $a = 0;
+            foreach ($lots as $l) {
+                $correctors[$a]->lots()->attach($l->id);
+                $a++;
+                if($a == $qtde_correctors ) $a = 0;
+            } */
+            DB::commit();
+        } catch ( \Exception $e ) {
+            DB::rollback();
+            dd($e);
+            /* return redirect()->route('redaction.for_correction')->with('erro', 'Falha ao processar arquivo.'); */
+        }
+
+        dd($lots, $qtdeLots);
+
     }
 
     public function get_data($image, $ch, $cv)

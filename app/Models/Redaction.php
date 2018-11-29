@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Corrector;
+use App\Models\Lot;
+
 class Redaction extends Model
 {
     use SoftDeletes;
@@ -42,6 +45,17 @@ class Redaction extends Model
     public static function laratablesCustomAction($redaction)
     {
         return view('redactions.actions', compact('redaction'))->render();
+    }
+
+    /* Relacionamentos N:N */
+    public function correctors()
+	{
+		return $this->belongsToMany('App\Models\Corrector')->withPivot('score')->withTimestamps();
+    }
+
+    public function lots()
+	{
+		return $this->belongsToMany('App\Models\Lot')->withTimestamps();
     }
 
 }

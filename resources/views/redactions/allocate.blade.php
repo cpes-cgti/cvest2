@@ -53,16 +53,15 @@
                 </div>
             @endif
             
-            <div class="col-md-6">
+            <p>Esta função distribui as redações selecionadas para correção entre os avaliadores disponíveis. 
+                Lembrando que toda redação deve ser corrigida no mínimo por 2 avaliadores.</p>
+
+            <p class="text-red">É necessário a existência de no mínimo 2 avaliadores cadastrados no sistema.</p>
+            
+            <br>
                 
-            </div>
-            <div class="col-md-6">
-                
-            </div>
-                
-            <form method="post" action="#" enctype="multipart/form-data">
+            <form method="post" action="{{ route('redaction.process_allocate') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-success btn-block"><i class="fas fa-project-diagram"></i> Distribuir redações</button>
                 </div>
