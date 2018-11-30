@@ -22,12 +22,6 @@ class Corrector extends Model
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /* Relacionamentos 1:N */
-    public function lots()
-	{
-        return $this->hasMany('App\Models\Lot');
-    }
-
     /* Relacionamentos N:N */
     public function redactions()
 	{

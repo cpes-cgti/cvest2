@@ -53,9 +53,4 @@ class Redaction extends Model
 		return $this->belongsToMany('App\Models\Corrector')->withPivot('score')->withTimestamps();
     }
 
-    public function lots()
-	{
-		return $this->belongsToMany('App\Models\Lot')->withTimestamps();
-    }
-
 }

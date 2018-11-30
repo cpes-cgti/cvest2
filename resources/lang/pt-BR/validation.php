@@ -119,6 +119,7 @@ return [
     'attributes' => [
         'name'             => 'nome',
         'password'         => 'senha',
+        'correctors'         => 'avaliadores',
     ],
 
 ];

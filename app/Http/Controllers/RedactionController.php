@@ -119,57 +119,135 @@ class RedactionController extends Controller
 
     public function allocate()
     {
-        return view('redactions.allocate');
+        $lots = DB::table('redactions')
+            ->join('corrector_redaction', 'corrector_redaction.redaction_id', '=','redactions.id')
+            ->join('correctors', 'correctors.id', '=', 'corrector_redaction.corrector_id')
+            ->join('users', 'users.id', '=', 'correctors.user_id')
+            ->select(
+                'corrector_redaction.lot', 
+                DB::raw('COUNT(corrector_redaction.id) as lot_count'),
+                /* DB::raw('14 as ready'), */
+                DB::raw('SUM(IF(ISNULL(corrector_redaction.score), 0, 1)) as ready'),
+                'users.name'
+            )
+            ->groupBy('corrector_redaction.lot', 'users.name')
+            ->get();
+        $correctors = Corrector::with('user')->get();
+        $correctors_ids = DB::table('correctors')->select('id')->get();
+        return view('redactions.allocate', compact('lots', 'correctors', 'correctors_ids'));
     }
     
-    public function process_allocate()
+    public function process_allocate(Request $request)
     {
+        $validatedData = $request->validate([
+            'correctors' => 'required',
+        ]);
         DB::beginTransaction();
         try{
-            //Lista e conta Avaliadores e Redações
-            $correctors = Corrector::all();
+            //Lista e conta os Avaliadores disponíveis
+            $correctors = Corrector::whereIn('id', $request->correctors)->get();
             $qtde_correctors = $correctors->count();
             if ($qtde_correctors < 2){
                 return redirect()->route('redaction.allocate')
-                    ->with('erro', 'Não foi possível distribuir as redações. É necessário no mínimo 2 avaliadores cadastrados.');
+                    ->with('erro', 'Não foi possível distribuir as redações. É necessário selecionar no mínimo 2 avaliadores.');
             }
-            $redactions = Redaction::where('status', 'Para correção')->get();
+            //Verificar se existem redações para distribuir
+            $redactions = Redaction::has('correctors', 0)->where('status', 'Para correção')->get();
             $qtde_redactions = $redactions->count();
-            //Calcula o tamanho ideal para os lotes (Entre 30 e 60)
-            $maxLot = ceil($qtde_redactions/$qtde_correctors);
-            while ($maxLot > 59){
-                $maxLot = ceil($maxLot/2);
+            $redactions = Redaction::has('correctors', 1)->where('status', 'Para correção')->get();
+            $qtde_redactions += $redactions->count();
+            if ($qtde_redactions < 1){
+                return redirect()->route('redaction.allocate')
+                    ->with('erro', 'Não foi possível distribuir as redações. Não existem redações para distribuir ou todas já estão atribuídas aos avaliadores.');
             }
-            //Calcula a quantidade de lotes e cria os lotes e atribui para um avaliador
-            $qtdeLots = ceil($qtde_redactions / $maxLot);
-            $a = 0;
-            for ($i=0; $i<$qtdeLots; $i++){
-                $lot = Lot::create([
-                    'corrector_id' => $correctors[$a]->id,
-                ]);
-                $a++;
-                if($a == $qtde_correctors ) $a = 0;
-                $redactions_lot = Redaction::has('lots', 0)->where('status', 'Para correção')->limit($maxLot)->get();
-                foreach ($redactions_lot as $r) {
-                    $r->lots()->attach($lot->id);
+            //Distribuir redações para os corretores (que não foram atribuídas para nenhum corretor)
+            $redactions = Redaction::has('correctors', 0)->where('status', 'Para correção')->get();
+            $qtde_redactions = $redactions->count();
+            $redactions = $redactions->concat($redactions);
+            $qtde_corrections = $redactions->count();
+            $qtde_per_correctors = ceil($qtde_corrections/$qtde_correctors);
+            $max_lot = 30;
+            $cont = 1;
+            $i = 0;
+            $lot = DB::table('corrector_redaction')->max('lot') + 1;
+            $cont_lot = 1;
+            foreach ($redactions as $r) {
+                if ($cont_lot > $max_lot){
+                    $lot++;
+                    $cont_lot = 1;
+                }
+                if ($cont > $qtde_per_correctors) {
+                    $i++;
+                    $cont = 1;
+                    $lot++;
+                    $cont_lot = 1;
+                }
+                $r->correctors()->attach($correctors[$i],['lot' => $lot]);
+                $cont++;
+                $cont_lot++;
+            }
+            //Distribuir redações para os avaliadores (que foram atribuídas apenas para um avaliador)
+            $redactions = Redaction::has('correctors', 1)->where('status', 'Para correção')->get();
+            $new_lot = DB::table('corrector_redaction')->max('lot') + 1;
+            //primeiro avaliador
+            $i = 0;
+            foreach ($redactions as $r) {
+                $allocated = false;
+                while (!$allocated){
+                    $available = DB::table('corrector_redaction')
+                        ->where('corrector_id', $correctors[$i]->id)
+                        ->where('redaction_id', $r->id)->doesntExist();
+                    // Atribui a redação ao avaliador se o mesmo já não estiver avaliando a mesma em outro lote.
+                    if ($available){
+                        // Verifica último lote deste avaliador
+                        $lot = DB::table('corrector_redaction')
+                            ->where('corrector_id', $correctors[$i]->id)->max('lot');
+                        if ($lot == null){
+                            // Se o avaliador não possuir nenhum lote, cria um e atribui a redação
+                            $r->correctors()->attach($correctors[$i],['lot' => $new_lot]);
+                            $new_lot++;
+                        } else {
+                            $lot_size = DB::table('corrector_redaction')
+                            ->where('lot', $lot)->count('id');
+                            if ($lot_size < 30){
+                                // Se o lote possuir menos de 30, atribui a redação ao avaliador neste lote
+                                $r->correctors()->attach($correctors[$i],['lot' => $lot]);
+                            } else {
+                                // Se o lote estiver cheio, cria um lote e atribui a redação ao avaliador
+                                $r->correctors()->attach($correctors[$i],['lot' => $new_lot]);
+                                $new_lot++;
+                            }
+                        }
+                        $allocated = true;
+                    }
+                    //ir para próximo avaliador
+                    $i++;
+                    if ($i == $qtde_correctors) {
+                        //retorna ao primeiro avaliador
+                        $i = 0;
+                    }
                 }
             }
-
-            /* $lots = Lot::all();
-            $a = 0;
-            foreach ($lots as $l) {
-                $correctors[$a]->lots()->attach($l->id);
-                $a++;
-                if($a == $qtde_correctors ) $a = 0;
-            } */
             DB::commit();
+            return redirect()->route('redaction.allocate');
         } catch ( \Exception $e ) {
             DB::rollback();
-            dd($e);
-            /* return redirect()->route('redaction.for_correction')->with('erro', 'Falha ao processar arquivo.'); */
+            return redirect()->route('redaction.allocate')->with('erro', 'Falha ao distribuir as redações.');
         }
 
-        dd($lots, $qtdeLots);
+
+    }
+
+    public function lot_destroy($id)
+    {
+        $lot = DB::table('corrector_redaction')->where('lot', $id)->whereNull('score');
+        if ($lot->count() > 0){
+            $del = $lot->delete();
+            if ($del > 0){
+                return redirect()->route('redaction.allocate');
+            }
+        }
+        return redirect()->route('redaction.allocate')->with('erro', 'O lote não pode ser excluído.');
 
     }
 

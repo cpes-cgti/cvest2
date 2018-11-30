@@ -66,3 +66,4 @@ Route::get('/admin/redacoes/datatables', 'RedactionController@datatables')->name
 Route::get('/admin/redacoes', 'RedactionController@index')->name('redaction.index');
 Route::get('/admin/redacoes/exibir/{id}', 'RedactionController@show')->name('redaction.show');
 Route::get('/admin/redacoes/exibir_completo/{id}', 'RedactionController@show_admin')->name('redaction.show_admin');
+Route::delete('/admin/redacoes/remover_lote/{id}', 'RedactionController@lot_destroy')->name('redaction.lot_destroy');
