@@ -8,94 +8,90 @@
 
 @section('content')
     <div class="row">
-            <div class="col-md-6">
-                {{-- Caixa do avaliador --}}
-                @if ($isCorrector)
-                    <div class="box box-solid">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Prezado(a) avaliador(a):</h3>
-                        </div>
-                        <div class="box-body">
-                            <h5>Redações selecionadas para correção: <b>100</b></h5>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                </div>
-                            </div>
-                            <h5>Redações corrigidas: <b>100</b></h5>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-                @if (\Auth::user()->profile > 1)
-                    <div class="box box-solid">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Prezado(a) coordenador(a):</h3>
-                        </div>
-                        <div class="box-body">
-                            <h5>Redações selecionadas para correção: <b>100</b></h5>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                </div>
-                            </div>
-                            <h5>Redações corrigidas: <b>100</b></h5>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-                @if (\Auth::user()->profile > 3)
-                    <div class="box box-solid">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Prezado(a) administrador(a) do sistema:</h3>
-                        </div>
-                        <div class="box-body">
-                            <h5>Redações selecionadas para correção: <b>100</b></h5>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                </div>
-                            </div>
-                            <h5>Redações corrigidas: <b>100</b></h5>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            </div>
         <div class="col-md-6">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Estatíscas gerais:</h3>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <canvas id="pieChart" style="height: 187px; width: 374px;" width="467" height="233"></canvas>        
-                        </div>
-                        <div class="col-md-4">
-                            <ul class="chart-legend clearfix">
-                                <li><i class="fas fa-square text-gray"></i> Digitalizada</li>
-                                <li><i class="fas fa-square text-yellow"></i> Para correção</li>
-                                <li><i class="fas fa-square text-blue"></i> Corrigida (1x)</li>
-                                <li><i class="fas fa-square text-green"></i> Corrigida (concluído)</li>
-                                <li><i class="fas fa-square text-red"></i> Inconsistência</li>
-                            </ul>
+            {{-- Caixa do avaliador --}}
+            @if ($isCorrector)
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Prezado(a) avaliador(a):</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><i class="fa fa-fw fa-file-signature "></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Você possui <b>{{ $corrector->to_do }}</b> redações para corrigir.</span>
+                                
+                                <div class="progress-group">
+                                    <span class="progress-text">Redações corrigidas: {{ $corrector->ready }}</span>
+                                    <span class="progress-number"><b> {{ ceil($corrector->ready / $corrector->to_do * 100) }}%</b></span>
+                                    <div class="progress" style="height: 1em;">
+                                        <div class="progress-bar progress-bar-green" style="width: {{ ceil($corrector->ready / $corrector->to_do * 100) }}%; background-color: #00a65a;"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
+            @if (\Auth::user()->profile > 1)
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Redações:</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <canvas id="pieChart" style="height: 187px; width: 374px;" width="467" height="233"></canvas>        
+                            </div>
+                            <div class="col-md-4">
+                                <ul class="chart-legend clearfix">
+                                    <li>
+                                        <i class="fas fa-square" style="color: #000;"></i> 
+                                            Total: {{ $redactions->sum->qtde }} ( 100% )
+                                    </li>
+                                    @foreach ($redactions as $r) 
+                                        <li>
+                                        <i class="fas fa-square" style="color: {{ $colors[$r->status] }};"></i> 
+                                            {{ $r->status }}: {{ $r->qtde }} ( <b>{{ round($r->qtde / $redactions->sum->qtde * 100, 2) }}% </b> )
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+        <div class="col-md-6">
+            @if (\Auth::user()->profile > 1)
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <i class="fa fa-fw fa-users"></i>
+                        <h3 class="box-title">Avaliadores:</h3>
+                        <div class="progress-group">
+                            <span class="progress-text">Redações corrigidas: {{ $correctors->sum->ready }} / {{ $correctors->sum->to_do }}</span>
+                            <span class="progress-number"><b> {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%</b></span>
+                            <div class="progress" style="height: 1em;">
+                                <div class="progress-bar progress-bar-primary" style="width: {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        @foreach ($correctors as $c)
+                        <div class="box box-solid">
+                            <h4><i class="fa fa-fw fa-user"></i>{{ $c->name }}</h4>
+                            <div class="progress-group">
+                                <span class="progress-text">Redações corrigidas: {{ $c->ready }} / {{ $c->to_do }}</span>
+                                <span class="progress-number"><b> {{ ceil($c->ready / $c->to_do * 100) }}%</b></span>
+                                <div class="progress" style="height: 1em;">
+                                    <div class="progress-bar progress-bar-primary progress-bar-striped" style="width: {{ ceil($c->ready / $c->to_do * 100) }}%; "></div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     
