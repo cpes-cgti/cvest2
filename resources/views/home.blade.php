@@ -16,20 +16,27 @@
                         <h3 class="box-title">Prezado(a) avaliador(a):</h3>
                     </div>
                     <div class="box-body">
-                        <div class="info-box">
-                            <span class="info-box-icon bg-green"><i class="fa fa-fw fa-file-signature "></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Você possui <b>{{ $corrector->to_do }}</b> redações para corrigir.</span>
-                                
-                                <div class="progress-group">
-                                    <span class="progress-text">Redações corrigidas: {{ $corrector->ready }}</span>
-                                    <span class="progress-number"><b> {{ ceil($corrector->ready / $corrector->to_do * 100) }}%</b></span>
-                                    <div class="progress" style="height: 1em;">
-                                        <div class="progress-bar progress-bar-green" style="width: {{ ceil($corrector->ready / $corrector->to_do * 100) }}%; background-color: #00a65a;"></div>
+                        @if (!isset($corrector))
+                            <h4 style="color: darkgoldenrod;">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                Você ainda não possui redações para corrigir.
+                            </h4>
+                        @else
+                            <div class="info-box">
+                                <span class="info-box-icon bg-green"><i class="fa fa-fw fa-file-signature "></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Você possui <b>{{ $corrector->to_do }}</b> redações para corrigir.</span>
+                                    
+                                    <div class="progress-group">
+                                        <span class="progress-text">Redações corrigidas: {{ $corrector->ready }}</span>
+                                        <span class="progress-number"><b> {{ ceil($corrector->ready / $corrector->to_do * 100) }}%</b></span>
+                                        <div class="progress" style="height: 1em;">
+                                            <div class="progress-bar progress-bar-green" style="width: {{ ceil($corrector->ready / $corrector->to_do * 100) }}%; background-color: #00a65a;"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -39,25 +46,32 @@
                         <h3 class="box-title">Redações:</h3>
                     </div>
                     <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <canvas id="pieChart" style="height: 187px; width: 374px;" width="467" height="233"></canvas>        
-                            </div>
-                            <div class="col-md-4">
-                                <ul class="chart-legend clearfix">
-                                    <li>
-                                        <i class="fas fa-square" style="color: #000;"></i> 
-                                            Total: {{ $redactions->sum->qtde }} ( 100% )
-                                    </li>
-                                    @foreach ($redactions as $r) 
+                        @if ($redactions->count() < 1)
+                            <h4 style="color: darkgoldenrod;">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                As redações ainda não foram digitalizadas e inseridas no sistema.
+                            </h4>
+                        @else
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <canvas id="pieChart" style="height: 187px; width: 374px;" width="467" height="233"></canvas>        
+                                </div>
+                                <div class="col-md-4">
+                                    <ul class="chart-legend clearfix">
                                         <li>
-                                        <i class="fas fa-square" style="color: {{ $colors[$r->status] }};"></i> 
-                                            {{ $r->status }}: {{ $r->qtde }} ( <b>{{ round($r->qtde / $redactions->sum->qtde * 100, 2) }}% </b> )
+                                            <i class="fas fa-square" style="color: #000;"></i> 
+                                                Total: {{ $redactions->sum->qtde }} ( 100% )
                                         </li>
-                                    @endforeach
-                                </ul>
+                                        @foreach ($redactions as $r) 
+                                            <li>
+                                                <i class="fas fa-square" style="color: {{ $colors[$r->status] }};"></i> 
+                                                {{ $r->status }}: {{ $r->qtde }} <br>( <b>{{ round($r->qtde / $redactions->sum->qtde * 100, 2) }}% </b> )
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -70,25 +84,39 @@
                         <h3 class="box-title">Avaliadores:</h3>
                         <div class="progress-group">
                             <span class="progress-text">Redações corrigidas: {{ $correctors->sum->ready }} / {{ $correctors->sum->to_do }}</span>
-                            <span class="progress-number"><b> {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%</b></span>
-                            <div class="progress" style="height: 1em;">
-                                <div class="progress-bar progress-bar-primary" style="width: {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%;"></div>
-                            </div>
+                            @if ($correctors->sum->to_do > 0)
+                                <span class="progress-number"><b> {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%</b></span>
+                                <div class="progress" style="height: 1em;">
+                                    <div class="progress-bar progress-bar-primary" style="width: {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%;"></div>
+                                </div>
+                            @else
+                                <span class="progress-number"><b> ---%</b></span>
+                                <div class="progress" style="height: 1em;">
+                                    <div class="progress-bar progress-bar-primary" style="width: 0%;"></div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="box-body">
-                        @foreach ($correctors as $c)
-                        <div class="box box-solid">
-                            <h4><i class="fa fa-fw fa-user"></i>{{ $c->name }}</h4>
-                            <div class="progress-group">
-                                <span class="progress-text">Redações corrigidas: {{ $c->ready }} / {{ $c->to_do }}</span>
-                                <span class="progress-number"><b> {{ ceil($c->ready / $c->to_do * 100) }}%</b></span>
-                                <div class="progress" style="height: 1em;">
-                                    <div class="progress-bar progress-bar-primary progress-bar-striped" style="width: {{ ceil($c->ready / $c->to_do * 100) }}%; "></div>
+                        @if ($correctors->count() < 1)
+                            <h4 style="color: darkgoldenrod;">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                As redações ainda não foram distribuídas para os avaliadores.
+                            </h4>
+                        @else
+                            @foreach ($correctors as $c)
+                            <div class="box box-solid">
+                                <h4><i class="fa fa-fw fa-user"></i>{{ $c->name }}</h4>
+                                <div class="progress-group">
+                                    <span class="progress-text">Redações corrigidas: {{ $c->ready }} / {{ $c->to_do }}</span>
+                                    <span class="progress-number"><b> {{ ceil($c->ready / $c->to_do * 100) }}%</b></span>
+                                    <div class="progress" style="height: 1em;">
+                                        <div class="progress-bar progress-bar-primary progress-bar-striped" style="width: {{ ceil($c->ready / $c->to_do * 100) }}%; "></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        @endforeach
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             @endif

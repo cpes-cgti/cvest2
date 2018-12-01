@@ -12,7 +12,7 @@ class CorrectorsTableSeeder extends Seeder
      */
     public function run()
     {
-        /* Corrector::create([
+        Corrector::create([
             'cpf' => '03256858430',
             'siape' => '1804315',
             'user_id' => 1,
@@ -26,11 +26,16 @@ class CorrectorsTableSeeder extends Seeder
             'cpf' => '03702299408',
             'siape' => '2765325',
             'user_id' => 3,
-        ]); */
+        ]);
         Corrector::create([
             'cpf' => '07599725407',
             'siape' => '1150712',
             'user_id' => 4,
+        ]);
+        Corrector::create([
+            'cpf' => '29380979487',
+            'siape' => '1022776',
+            'user_id' => 5,
         ]);
         
     }

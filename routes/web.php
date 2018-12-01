@@ -51,6 +51,7 @@ Route::get('/admin/selecionar', 'RedactionController@for_correction')->name('red
 Route::post('/admin/selecionar', 'RedactionController@process_for_correction')->name('redaction.process_for_correction');
 Route::get('/admin/distribuir_redacoes', 'RedactionController@allocate')->name('redaction.allocate');
 Route::post('/admin/distribuir_redacoes', 'RedactionController@process_allocate')->name('redaction.process_allocate');
+Route::get('/admin/corrigir_redacoes', 'RedactionController@rate')->name('redaction.rate');
 
 /* Rotas do CRUD de avaliadores */
 Route::get('/admin/avaliadores', 'CorrectorController@index')->name('corrector.index');

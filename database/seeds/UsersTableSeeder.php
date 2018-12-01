@@ -37,5 +37,11 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('123456'),
             'profile' => 2,
         ]);
+        User::create([
+            'name' => 'Maviael Calado Ramalho',
+            'email' => 'maviael.calado@pesqueira.ifpe.edu.br',
+            'password' => bcrypt('123456'),
+            'profile' => 0,
+        ]);
     }
 }

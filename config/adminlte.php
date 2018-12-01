@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'CVEST 2',
+    'title' => 'CVEST - Redações 2019.1',
 
     'title_prefix' => '',
 
@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>CVEST</b>2',
+    'logo' => 'REDAÇÕES <b>2019.1</b>',
 
-    'logo_mini' => '<b>CV</b>2',
+    'logo_mini' => '<b>IFPE</b>',
 
     /*
     |--------------------------------------------------------------------------
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'collapse_sidebar' => false,
+    'collapse_sidebar' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -113,6 +113,11 @@ return [
 
     'menu' => [
         [
+            'text' => 'Resumo',
+            'icon' => 'home',
+            'route'  => 'admin',
+        ],
+        [
             'text' => 'Avaliadores',
             'icon' => 'users',
             'can' => 'level2',
@@ -139,8 +144,13 @@ return [
         [
             'text' => 'Distribuir redações',
             'icon' => 'share-square',
-            'can' => 'level2',
+            'can' => 'level4',
             'route'  => 'redaction.allocate',
+        ],
+        [
+            'text' => 'Corrigir redações',
+            'icon' => 'user-check',
+            'route'  => 'redaction.rate',
         ],
     ],
 

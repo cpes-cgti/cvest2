@@ -251,6 +251,11 @@ class RedactionController extends Controller
 
     }
 
+    public function rate()
+    {
+        return 'Teste';
+    }
+
     public function get_data($image, $ch, $cv)
     {
         $file = Storage::get($image);
