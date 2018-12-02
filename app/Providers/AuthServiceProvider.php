@@ -41,5 +41,9 @@ class AuthServiceProvider extends ServiceProvider
             return $user->profile > 0 ;
         });
 
+        Gate::define('corrector', function ($user) {
+            return $user->corrector != null ;
+        });
+
     }
 }

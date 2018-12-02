@@ -3,6 +3,26 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {{-- https://realfavicongenerator.net/ --}}
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#349a46">
+    <link rel="shortcut icon" href="/favicon/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="CVEST">
+    <meta name="application-name" content="CVEST">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-config" content="/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    {{-- Facebook Metadata --}}
+    <meta property="og:image:height" content="100">
+    <meta property="og:image:width" content="190">
+    <meta property="og:title" content="CVEST">
+    <meta property="og:description" content="Comiss&atilde;o de Vestibulares e Concursos do IFPE">
+    <meta property="og:url" content="https://cvest.ifpe.edu.br/">
+    <meta property="og:image" content="https://cvest.ifpe.edu.br/favicon/apple-touch-icon-180x180.png/og-image.jpg">
+    {{-- https://realfavicongenerator.net/ --}}
     <title>@yield('title_prefix', config('adminlte.title_prefix', ''))
     @yield('title', config('adminlte.title', 'AdminLTE 2'))
     @yield('title_postfix', config('adminlte.title_postfix', ''))</title>
@@ -37,7 +57,7 @@
     <![endif]-->
 
     <!-- Google Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> --}}
 </head>
 <body class="hold-transition @yield('body_class')">
 

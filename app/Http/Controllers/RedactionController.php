@@ -25,6 +25,7 @@ class RedactionController extends Controller
         );
         $this->middleware(['auth', 'can:level4'])->only($array);
         $this->middleware(['auth', 'can:level2'])->except($array);
+        $this->middleware(['auth', 'can:corrector'])->only('rate_lots');
     }
 
 
@@ -251,9 +252,78 @@ class RedactionController extends Controller
 
     }
 
-    public function rate()
+    public function rate_lots()
     {
-        return 'Teste';
+        $lots = DB::table('corrector_redaction')
+            ->join('correctors', 'correctors.id', '=', 'corrector_redaction.corrector_id')
+            ->join('users', 'users.id', '=', 'correctors.user_id')
+            ->where('users.id', \Auth::user()->id)
+            ->select(
+                'corrector_redaction.lot', 
+                DB::raw('COUNT(corrector_redaction.id) as to_do'),
+                DB::raw('SUM(IF(ISNULL(corrector_redaction.score), 0, 1)) as ready'),
+                DB::raw('MIN(start) as start'),
+                DB::raw('MAX(end) as end')
+            )
+            ->groupBy('corrector_redaction.lot')
+            ->get();
+        return view('redactions.rate_lots', compact('lots'));
+    }
+    
+    public function rate_lot($lot)
+    {
+        $redactions = DB::table('corrector_redaction')
+            ->where('corrector_redaction.lot', $lot)
+            ->orderBy('corrector_redaction.id')
+            ->get();
+        // Valida se o lote informado é válido
+        if ($redactions->count() < 1){
+            abort(400);
+        }
+        // Valida se o lote informado foi atribuído para usuário logado
+        $corrector = Corrector::findOrFail($redactions->first()->corrector_id);
+        if ($corrector->user->id != \Auth::user()->id){
+            abort(403);
+        }
+
+        $next_redactions = $redactions->where('start', null);
+
+        if ($next_redactions->count() > 0){
+            return redirect()->route('redaction.rate', [$lot, $next_redactions->first()->id]);
+        }
+        return redirect()->route('redaction.rate', [$lot, $redactions->first()->id]);
+    }
+
+    public function rate($lot, $id)
+    {
+        $redactions = DB::table('corrector_redaction')
+            ->where('corrector_redaction.lot', $lot)
+            ->orderBy('corrector_redaction.id')
+            ->get();
+        // Valida se o lote informado é válido
+        if ($redactions->count() < 1){
+            abort(400);
+        }
+        $redaction = DB::table('corrector_redaction')
+        ->where('corrector_redaction.lot', $lot)
+        ->where('corrector_redaction.id', $id)
+        ->orderBy('corrector_redaction.id')
+        ->get();
+        // Valida se o lote e o id são válidos (simultâneamente)
+        if ($redactions->count() < 1 || $redaction->count() < 1){
+            abort(400);
+        }
+        // Valida se a redacão foi atribuída para usuário logado
+        $corrector = Corrector::findOrFail($redaction->first()->corrector_id);
+        if ($corrector->user->id != \Auth::user()->id){
+            abort(403);
+        }
+
+        $redaction = Redaction::findOrFail($redaction->first()->redaction_id);
+        $img_data = $this->get_data($redaction->file, 710, 0);
+        
+        /* dd($redactions, $redaction, $lot, $id); */
+        return view('redactions.rate', compact('img_data', 'lot','id'));
     }
 
     public function get_data($image, $ch, $cv)

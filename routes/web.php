@@ -44,14 +44,16 @@ Route::post('/senha/recuperar', 'Auth\ResetPasswordController@reset');
 Route::get('/senha/recuperar/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 
 /* Rotas da área administrativa */
-Route::get('/admin', 'HomeController@index')->name('admin');
+Route::get('/admin/resumo', 'HomeController@index')->name('admin');
 Route::get('/admin/importar', 'RedactionController@import')->name('redaction.import');
 Route::post('/admin/importar', 'RedactionController@process_import')->name('redaction.process_import');
 Route::get('/admin/selecionar', 'RedactionController@for_correction')->name('redaction.for_correction');
 Route::post('/admin/selecionar', 'RedactionController@process_for_correction')->name('redaction.process_for_correction');
 Route::get('/admin/distribuir_redacoes', 'RedactionController@allocate')->name('redaction.allocate');
 Route::post('/admin/distribuir_redacoes', 'RedactionController@process_allocate')->name('redaction.process_allocate');
-Route::get('/admin/corrigir_redacoes', 'RedactionController@rate')->name('redaction.rate');
+Route::get('/admin/corrigir_redacoes', 'RedactionController@rate_lots')->name('redaction.rate_lots');
+Route::get('/admin/corrigir_redacoes/{lot}', 'RedactionController@rate_lot')->name('redaction.rate_lot');
+Route::get('/admin/corrigir_redacoes/{lot}/{id}', 'RedactionController@rate')->name('redaction.rate');
 
 /* Rotas do CRUD de avaliadores */
 Route::get('/admin/avaliadores', 'CorrectorController@index')->name('corrector.index');

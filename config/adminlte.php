@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'dashboard_url' => 'admin',
+    'dashboard_url' => 'admin/resumo',
 
     'logout_url' => 'sair',
 
@@ -150,7 +150,8 @@ return [
         [
             'text' => 'Corrigir redações',
             'icon' => 'user-check',
-            'route'  => 'redaction.rate',
+            'can' => 'corrector',
+            'route'  => 'redaction.rate_lots',
         ],
     ],
 
@@ -186,8 +187,8 @@ return [
     */
 
     'plugins' => [
-        'datatables' => true,
-        'select2'    => true,
-        'chartjs'    => true,
+        'datatables' => false,
+        'select2'    => false,
+        'chartjs'    => false,
     ],
 ];

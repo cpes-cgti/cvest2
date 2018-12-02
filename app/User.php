@@ -36,4 +36,9 @@ class User extends Authenticatable
       $this->notify(new ResetPasswordNotification($token));
     }
 
+    public function corrector()
+    {
+        return $this->belongsTo('App\Models\Corrector', 'id');
+    }
+
 }
