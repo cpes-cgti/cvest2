@@ -326,6 +326,17 @@ class RedactionController extends Controller
         return view('redactions.rate', compact('img_data', 'lot','id'));
     }
 
+    public function rate_save($lot, $id, Request $request)
+    {
+        $validatedData = $request->validate([
+            'competenceA' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
+            'competenceB' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
+            'competenceC' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
+            'competenceD' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
+        ]);
+        dd($lot, $id, $request->all());
+    }
+
     public function get_data($image, $ch, $cv)
     {
         $file = Storage::get($image);

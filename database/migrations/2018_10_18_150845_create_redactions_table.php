@@ -34,6 +34,16 @@ class CreateRedactionsTable extends Migration
             $table->timestamp('end')->nullable();
             $table->timestamp('duration')->nullable();
             $table->double('score', 5, 2)->nullable();
+            $table->boolean('zero_empty')->default(false);
+            $table->boolean('zero_identification')->default(false);
+            $table->boolean('zero_theme')->default(false);
+            $table->boolean('zero_lines')->default(false);
+            $table->boolean('zero_offensive_content')->default(false);
+            $table->double('competenceA', 5, 2)->nullable();
+            $table->double('competenceB', 5, 2)->nullable();
+            $table->double('competenceC', 5, 2)->nullable();
+            $table->double('competenceD', 5, 2)->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->foreign('corrector_id')->references('id')->on('correctors')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('redaction_id')->references('id')->on('redactions')->onUpdate('cascade')->onDelete('restrict');

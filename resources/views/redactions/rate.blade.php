@@ -18,8 +18,8 @@
 @section('content')
     <div class="box">
         <div class="box-header">
-            <a href="{{ route('redaction.rate', [$lot, $id]) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Anterior</a>
-            <a href="{{ route('redaction.rate', [$lot, $id]) }}" class="btn btn-primary"> Próximo <i class="fas fa-arrow-right"></i></a>
+            <a id="btn_previous" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Anterior</a>
+            <a id="btn_next" class="btn btn-primary"> Próximo <i class="fas fa-arrow-right"></i></a>
             <div class="box-tools pull-right">
                 <span><b>NOTA:</b></span>&nbsp;&nbsp;
                 <a id="cor_nota" class="btn btn-danger"><span style="font-size: 1.5em; width: 6em; display: inline-block;" id="nota">0,00</span></a>
@@ -35,7 +35,7 @@
             @endif
             <div class="row">
                 <div class="col-md-4">
-                    <form>
+                    <form method="post" action="{{ route('redaction.rate_save', [$lot, $id]) }}" enctype="multipart/form-data" id="form_rate">
                         {{ csrf_field() }}
                         <label>Atribuir nota <b>ZERO</b> à redação:</label>
                         <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_1" name="zerar_1" type="checkbox"> Folha resposta em branco.</span>
@@ -44,9 +44,15 @@
                         <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_4" name="zerar_4" type="checkbox"> Não atende ao número mínimo de linhas.</span>
                         <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_5" name="zerar_5" type="checkbox"> Presença de conteúdo impróprio/ofensivo.</span>
                         <br>
-                        <div id="avaliar_competencias">
+                        <div id="avaliar_competence">
                             <label>Avaliar competências exigidas:</label>
-                            <table id="tb_competencias" class="table table-bordered" style="text-align: center;">
+                            <table id="tb_competence" class="table table-bordered" 
+                                style="text-align: center; 
+                                    {{ ($errors->has('competenceA') || 
+                                        $errors->has('competenceB') || 
+                                        $errors->has('competenceC') || 
+                                        $errors->has('competenceD') ) ? 'border: 2px solid red;' : '' }}
+                                    ">
                                 <tr>
                                     <td><b>NÍVEL</b></td>
                                     <td><b>0</b></td>
@@ -58,42 +64,44 @@
                                 </tr>
                                 <tr>
                                     <td><b>A</b></td>
-                                    <td><input type="radio" id="ca1" name="competencia-A"> 0,0</td>
-                                    <td><input type="radio" id="ca2" name="competencia-A"> 0,5</td>
-                                    <td><input type="radio" id="ca3" name="competencia-A"> 1,0</td>
-                                    <td><input type="radio" id="ca4" name="competencia-A"> 1,5</td>
-                                    <td><input type="radio" id="ca5" name="competencia-A"> 2,0</td>
-                                    <td><input type="radio" id="ca6" name="competencia-A"> 2,5</td>
+                                    <td><input type="radio" name="competenceA" value="0.0" @if(old('competenceA') == '0.0') checked @endif> 0,0</td>
+                                    <td><input type="radio" name="competenceA" value="0.5" @if(old('competenceA') == '0.5') checked @endif> 0,5</td>
+                                    <td><input type="radio" name="competenceA" value="1.0" @if(old('competenceA') == '1.0') checked @endif> 1,0</td>
+                                    <td><input type="radio" name="competenceA" value="1.5" @if(old('competenceA') == '1.5') checked @endif> 1,5</td>
+                                    <td><input type="radio" name="competenceA" value="2.0" @if(old('competenceA') == '2.0') checked @endif> 2,0</td>
+                                    <td><input type="radio" name="competenceA" value="2.5" @if(old('competenceA') == '2.5') checked @endif> 2,5</td>
                                 </tr>
                                 <tr>
                                     <td><b>B</b></td>
-                                    <td><input type="radio" id="cb1" name="competencia-B"> 0,0</td>
-                                    <td><input type="radio" id="cb2" name="competencia-B"> 0,5</td>
-                                    <td><input type="radio" id="cb3" name="competencia-B"> 1,0</td>
-                                    <td><input type="radio" id="cb4" name="competencia-B"> 1,5</td>
-                                    <td><input type="radio" id="cb5" name="competencia-B"> 2,0</td>
-                                    <td><input type="radio" id="cb6" name="competencia-B"> 2,5</td>
+                                    <td><input type="radio" name="competenceB" value="0.0" @if(old('competenceB') == '0.0') checked @endif> 0,0</td>
+                                    <td><input type="radio" name="competenceB" value="0.5" @if(old('competenceB') == '0.5') checked @endif> 0,5</td>
+                                    <td><input type="radio" name="competenceB" value="1.0" @if(old('competenceB') == '1.0') checked @endif> 1,0</td>
+                                    <td><input type="radio" name="competenceB" value="1.5" @if(old('competenceB') == '1.5') checked @endif> 1,5</td>
+                                    <td><input type="radio" name="competenceB" value="2.0" @if(old('competenceB') == '2.0') checked @endif> 2,0</td>
+                                    <td><input type="radio" name="competenceB" value="2.5" @if(old('competenceB') == '2.5') checked @endif> 2,5</td>
                                 </tr>
                                 <tr>
                                     <td><b>C</b></td>
-                                    <td><input type="radio" id="cc1" name="competencia-C"> 0,0</td>
-                                    <td><input type="radio" id="cc2" name="competencia-C"> 0,5</td>
-                                    <td><input type="radio" id="cc3" name="competencia-C"> 1,0</td>
-                                    <td><input type="radio" id="cc4" name="competencia-C"> 1,5</td>
-                                    <td><input type="radio" id="cc5" name="competencia-C"> 2,0</td>
-                                    <td><input type="radio" id="cc6" name="competencia-C"> 2,5</td>
+                                    <td><input type="radio" name="competenceC" value="0.0" @if(old('competenceC') == '0.0') checked @endif> 0,0</td>
+                                    <td><input type="radio" name="competenceC" value="0.5" @if(old('competenceC') == '0.5') checked @endif> 0,5</td>
+                                    <td><input type="radio" name="competenceC" value="1.0" @if(old('competenceC') == '1.0') checked @endif> 1,0</td>
+                                    <td><input type="radio" name="competenceC" value="1.5" @if(old('competenceC') == '1.5') checked @endif> 1,5</td>
+                                    <td><input type="radio" name="competenceC" value="2.0" @if(old('competenceC') == '2.0') checked @endif> 2,0</td>
+                                    <td><input type="radio" name="competenceC" value="2.5" @if(old('competenceC') == '2.5') checked @endif> 2,5</td>
                                 </tr>
                                 <tr>
                                     <td><b>D</b></td>
-                                    <td><input type="radio" id="cd1" name="competencia-D"> 0,0</td>
-                                    <td><input type="radio" id="cd2" name="competencia-D"> 0,5</td>
-                                    <td><input type="radio" id="cd3" name="competencia-D"> 1,0</td>
-                                    <td><input type="radio" id="cd4" name="competencia-D"> 1,5</td>
-                                    <td><input type="radio" id="cd5" name="competencia-D"> 2,0</td>
-                                    <td><input type="radio" id="cd6" name="competencia-D"> 2,5</td>
+                                    <td><input type="radio" name="competenceD" value="0.0" @if(old('competenceD') == '0.0') checked @endif> 0,0</td>
+                                    <td><input type="radio" name="competenceD" value="0.5" @if(old('competenceD') == '0.5') checked @endif> 0,5</td>
+                                    <td><input type="radio" name="competenceD" value="1.0" @if(old('competenceD') == '1.0') checked @endif> 1,0</td>
+                                    <td><input type="radio" name="competenceD" value="1.5" @if(old('competenceD') == '1.5') checked @endif> 1,5</td>
+                                    <td><input type="radio" name="competenceD" value="2.0" @if(old('competenceD') == '2.0') checked @endif> 2,0</td>
+                                    <td><input type="radio" name="competenceD" value="2.5" @if(old('competenceD') == '2.5') checked @endif> 2,5</td>
                                 </tr>
                             </table>
-
+                            
+                            <label for="note">Observações:</label>
+                            <textarea class="form-control" name="note" id="" rows="5"></textarea>
                             <h5>A - Convenções da escrita</h5>
                             <p>Avaliação quanto ao domínio das convenções e normas do sistema de escrita formal da Língua Portuguesa.</p>
                             <h5>B - Tipo e gênero</h5>
@@ -148,55 +156,25 @@
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/icheck-1.0.2/icheck.js') }}"></script>
     <script>
-        $(document).ready( function () {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-red',
-                radioClass: 'iradio_square-blue'
-            });
-        }).on('ifChanged', function(e) {
+        function atualizarNota(){
             var c1 = $('#chk_zerar_1').is(':checked');
             var c2 = $('#chk_zerar_2').is(':checked');
             var c3 = $('#chk_zerar_3').is(':checked');
             var c4 = $('#chk_zerar_4').is(':checked');
             var c5 = $('#chk_zerar_5').is(':checked');
             if (c1 || c2 || c3 || c4 || c5){
-                $('#avaliar_competencias').css('display', 'none');
+                $('#avaliar_competence').css('display', 'none');
             } else {
-                $('#avaliar_competencias').css('display', 'block');
+                $('#avaliar_competence').css('display', 'block');
             }
-            var ca = 0;
-            if ($('#ca1').is(':checked')) ca = 0.0;
-            if ($('#ca2').is(':checked')) ca = 0.5;
-            if ($('#ca3').is(':checked')) ca = 1.0;
-            if ($('#ca4').is(':checked')) ca = 1.5;
-            if ($('#ca5').is(':checked')) ca = 2.0;
-            if ($('#ca6').is(':checked')) ca = 2.5;
-            var cb = 0;
-            if ($('#cb1').is(':checked')) cb = 0.0;
-            if ($('#cb2').is(':checked')) cb = 0.5;
-            if ($('#cb3').is(':checked')) cb = 1.0;
-            if ($('#cb4').is(':checked')) cb = 1.5;
-            if ($('#cb5').is(':checked')) cb = 2.0;
-            if ($('#cb6').is(':checked')) cb = 2.5;
-            var cc = 0;
-            if ($('#cc1').is(':checked')) cc = 0.0;
-            if ($('#cc2').is(':checked')) cc = 0.5;
-            if ($('#cc3').is(':checked')) cc = 1.0;
-            if ($('#cc4').is(':checked')) cc = 1.5;
-            if ($('#cc5').is(':checked')) cc = 2.0;
-            if ($('#cc6').is(':checked')) cc = 2.5;
-            var cd = 0;
-            if ($('#cd1').is(':checked')) cd = 0.0;
-            if ($('#cd2').is(':checked')) cd = 0.5;
-            if ($('#cd3').is(':checked')) cd = 1.0;
-            if ($('#cd4').is(':checked')) cd = 1.5;
-            if ($('#cd5').is(':checked')) cd = 2.0;
-            if ($('#cd6').is(':checked')) cd = 2.5;
 
             if (c1 || c2 || c3 || c4 || c5){
                 t = 0; 
             } else {
-                t = ca + cb + cc + cd;
+                t = (typeof $('input[name="competenceA"]:checked').val() == 'undefined' ? 0 : $('input[name="competenceA"]:checked').val() * 1)
+                    + (typeof $('input[name="competenceB"]:checked').val() == 'undefined' ? 0 : $('input[name="competenceB"]:checked').val() * 1)
+                    + (typeof $('input[name="competenceC"]:checked').val() == 'undefined' ? 0 : $('input[name="competenceC"]:checked').val() * 1)
+                    + (typeof $('input[name="competenceD"]:checked').val() == 'undefined' ? 0 : $('input[name="competenceD"]:checked').val() * 1);
             }
             tf = t.toFixed(2).replace(".",",");
             if (t>0){
@@ -207,7 +185,15 @@
                 $('#cor_nota').addClass('btn-danger');
             }
             $('#nota').text(tf);
-
+        }
+        $(document).ready( function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-red',
+                radioClass: 'iradio_square-blue'
+            });
+            atualizarNota();
+        }).on('ifChanged', function(e) {
+            atualizarNota();
         });
         $( "#img_minus" ).click(function() {
             w = $("#img_redacao").width();
@@ -222,6 +208,12 @@
             w = w + "px";
             $("#img_redacao").css("width", w);
             $("#img_redacao").css("margin", "5% auto");
+        });
+        $("#btn_previous").click(function(){
+            $("#form_rate").submit();
+        });
+        $("#btn_next").click(function(){
+            $("#form_rate").submit();
         });
     </script>
 @stop
