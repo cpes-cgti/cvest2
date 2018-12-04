@@ -18,14 +18,17 @@ class RedactionController extends Controller
 
     public function __construct()
     {
-        $array = array(
+        $level4 = array(
             'import', 
             'process_import', 
             'for_correction', 
             'process_for_correction',
         );
-        $this->middleware(['auth', 'can:level4'])->only($array);
-        $this->middleware(['auth', 'can:level2'])->except($array);
+        $corretor = array(
+            'rate_lots', 
+        );
+        $this->middleware(['auth', 'can:level4'])->only($level4);
+        $this->middleware(['auth', 'can:level2'])->except(array_merge($level4, $corretor));
         $this->middleware(['auth', 'can:corrector'])->only('rate_lots');
     }
 
