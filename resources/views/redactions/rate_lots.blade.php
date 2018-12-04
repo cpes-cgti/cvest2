@@ -90,8 +90,8 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ Carbon\Carbon::parse($l->start)->format('d/m/Y H:i:s') }}</td>
-                        <td>@if ($l->to_do == $l->ready) {{ Carbon\Carbon::parse($l->end)->format('d/m/Y H:i:s') }} @endif</td>
+                        <td>{{ $l->start }}</td>
+                        <td>@if ($l->to_do == $l->ready) {{ $l->end }} @endif</td>
                         <td>
                             <form class="form-inline" >
                                 <div class="btn-group">

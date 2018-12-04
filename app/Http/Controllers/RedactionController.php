@@ -26,10 +26,13 @@ class RedactionController extends Controller
         );
         $corretor = array(
             'rate_lots', 
+            'rate_lot', 
+            'rate', 
+            'rate_save', 
         );
         $this->middleware(['auth', 'can:level4'])->only($level4);
         $this->middleware(['auth', 'can:level2'])->except(array_merge($level4, $corretor));
-        $this->middleware(['auth', 'can:corrector'])->only('rate_lots');
+        $this->middleware(['auth', 'can:corrector'])->only($corretor);
     }
 
 
@@ -442,7 +445,7 @@ class RedactionController extends Controller
         
         $corrections = DB::table('corrector_redaction')
             ->where('corrector_redaction.redaction_id', $redaction->first()->redaction_id)
-            ->whereNotIn('corrector_redaction.score', ['null'])
+            ->whereNotNull('corrector_redaction.score')
             ->get();
 
         $qtde_corrections = $corrections->count();
@@ -458,7 +461,7 @@ class RedactionController extends Controller
                 $redaction->status = 'Corrigida (concluído)';
             }
         }
-        $redaction->score = $avg_score;
+        $redaction->final_score = $avg_score;
         $redaction->save();
 
         $index = $redactions->search($redactions->where('id',$id)->first());

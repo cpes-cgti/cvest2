@@ -65,7 +65,7 @@ class HomeController extends Controller
         $colors->put('Para correção', '#f39c12');
         $colors->put('Corrigida (1x)', '#3c8dbc');
         $colors->put('Corrigida (concluído)', '#00a65a');
-        $colors->put('Inconsistência', '#f56954');
+        $colors->put('Necessita revisão', '#f56954');
 
         return view('home', compact('redactions', 'colors', 'isCorrector', 'correctors', 'corrector'));
     }

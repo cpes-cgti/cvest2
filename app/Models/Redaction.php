@@ -32,7 +32,7 @@ class Redaction extends Model
             case 'Corrigida (concluído)':
                 $type = 'success';
                 break;
-            case 'Inconsistência':
+            case 'Necessita revisão':
                 $type = 'danger';
                 break;
         }
