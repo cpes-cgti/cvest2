@@ -10,6 +10,7 @@ use App\Models\Lot;
 use Freshbitsweb\Laratables\Laratables;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 
 class RedactionController extends Controller
@@ -43,7 +44,7 @@ class RedactionController extends Controller
     {
         $redaction = Redaction::findOrFail($id);
         $img = $redaction->file;
-        $img_data = $this->get_data($img, 710, 0);
+        $img_data = $this->get_data($img);
         return view('redactions.image', compact('img_data'));
     }
 
@@ -51,7 +52,7 @@ class RedactionController extends Controller
     {
         $redaction = Redaction::findOrFail($id);
         $img = $redaction->file;
-        $img_data = $this->get_data($img, 0, 0);
+        $img_data = $this->get_data($img, false);
         return view('redactions.image', compact('img_data'));
     }
 
@@ -318,36 +319,169 @@ class RedactionController extends Controller
         if ($corrector->user->id != \Auth::user()->id){
             abort(403);
         }
+        $r = $redaction->first();
 
         $redaction = Redaction::findOrFail($redaction->first()->redaction_id);
-        $img_data = $this->get_data($redaction->file, 710, 0);
+        $img_data = $this->get_data($redaction->file);
         
-        /* dd($redactions, $redaction, $lot, $id); */
-        return view('redactions.rate', compact('img_data', 'lot','id'));
+        $first = ($redactions->first()->id == $id);
+        $last = ($redactions->last()->id == $id);
+        $missing = $redactions->where('score', null)->count();
+        $start = \Carbon\Carbon::now();
+        $previous = null;
+        $next = null;
+
+        $index = $redactions->search($redactions->where('id',$id)->first());
+        if (!$first){
+            $previous = $redactions[$index - 1]->id;
+        }
+        if (!$last){
+            $next = $redactions[$index + 1]->id;
+        }
+        
+        return view('redactions.rate', compact('img_data', 'lot','id', 'first', 'last', 'missing', 'start', 'previous', 'next', 'r'));
     }
 
     public function rate_save($lot, $id, Request $request)
     {
         $validatedData = $request->validate([
-            'competenceA' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
-            'competenceB' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
-            'competenceC' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
-            'competenceD' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5',
+            'action' => 'required|in:previous,next,finish',
+            'start' => 'required|date',
+            'competenceA' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5|in:0.0,0.5,1.0,1.5,2.0,2.5',
+            'competenceB' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5|in:0.0,0.5,1.0,1.5,2.0,2.5',
+            'competenceC' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5|in:0.0,0.5,1.0,1.5,2.0,2.5',
+            'competenceD' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5|in:0.0,0.5,1.0,1.5,2.0,2.5',
         ]);
-        dd($lot, $id, $request->all());
+
+        $redactions = DB::table('corrector_redaction')
+            ->where('corrector_redaction.lot', $lot)
+            ->orderBy('corrector_redaction.id')
+            ->get();
+        // Valida se o lote informado é válido
+        if ($redactions->count() < 1){
+            abort(400);
+        }
+        //Validar Lote e ID
+        $redaction = DB::table('corrector_redaction')
+        ->where('corrector_redaction.lot', $lot)
+        ->where('corrector_redaction.id', $id)
+        ->orderBy('corrector_redaction.id')
+        ->get();
+        if ($redaction->count() < 1){
+            abort(400);
+        }
+        // Valida se a redacão foi atribuída para usuário logado
+        $corrector = Corrector::findOrFail($redaction->first()->corrector_id);
+        if ($corrector->user->id != \Auth::user()->id){
+            abort(403);
+        }
+
+        $start = Carbon::parse($request->start);
+        $end = Carbon::now();
+        $duration =$end->diffInSeconds($start);
+
+        if ( $duration <  $redaction->first()->duration * 1){
+            $start = Carbon::parse($redaction->first()->start);
+            $end = Carbon::parse($redaction->first()->end);
+            $duration =$end->diffInSeconds($start);
+        }
+
+        $data = [
+            "start" => $start->format('Y-m-d H:i:s'),
+            "end" => $end->format('Y-m-d H:i:s'),
+            "duration" => $duration,
+            "score" => null,
+            "zero_empty" => false,
+            "zero_identification" => false,
+            "zero_theme" => false,
+            "zero_lines" => false,
+            "zero_offensive_content" => false,
+            "competenceA" => null,
+            "competenceB" => null,
+            "competenceC" => null,
+            "competenceD" => null,
+            "note" => null,
+        ];
+
+        if (isset($request->zerar_1)){
+            $data["zero_empty"] = true;
+        }
+        if (isset($request->zerar_2)){
+            $data["zero_identification"] = true;
+        }
+        if (isset($request->zerar_3)){
+            $data["zero_theme"] = true;
+        }
+        if (isset($request->zerar_4)){
+            $data["zero_lines"] = true;
+        }
+        if (isset($request->zerar_5)){
+            $data["zero_offensive_content"] = true;
+        }
+        if (isset($request->note)){
+            $data["note"] = $request->note;
+        }
+
+        if ($data["zero_empty"] || $data["zero_identification"] || $data["zero_theme"] 
+                || $data["zero_lines"] || $data["zero_offensive_content"]){
+            $data["score"] = 0;
+        } else {
+            $data["competenceA"] = $request->competenceA;
+            $data["competenceB"] = $request->competenceB;
+            $data["competenceC"] = $request->competenceC;
+            $data["competenceD"] = $request->competenceD;
+            $data["score"] = 1 * $request->competenceA + $request->competenceB + $request->competenceC + $request->competenceD;
+        }
+
+        $corrector->redactions()->updateExistingPivot($redaction->first()->redaction_id,$data);
+
+        /* Atualizar status e média da redação */
+        
+        $corrections = DB::table('corrector_redaction')
+            ->where('corrector_redaction.redaction_id', $redaction->first()->redaction_id)
+            ->whereNotIn('corrector_redaction.score', ['null'])
+            ->get();
+
+        $qtde_corrections = $corrections->count();
+
+        $avg_score = $corrections->avg('score');
+        $redaction = Redaction::find($redaction->first()->redaction_id);
+        if ($qtde_corrections == 1){
+            $redaction->status = 'Corrigida (1x)';
+        } elseif ($qtde_corrections == 2){
+            if (abs($corrections->first()->score - $corrections->last()->score) >= 3){
+                $redaction->status = 'Necessita revisão';
+            } else {
+                $redaction->status = 'Corrigida (concluído)';
+            }
+        }
+        $redaction->score = $avg_score;
+        $redaction->save();
+
+        $index = $redactions->search($redactions->where('id',$id)->first());
+        if ($request->action == 'next'){
+            $next = $redactions[$index + 1]->id;
+            return redirect()->route('redaction.rate', [$lot, $next]);
+        } elseif ($request->action == 'previous'){
+            $previous = $redactions[$index - 1]->id;
+            return redirect()->route('redaction.rate', [$lot, $previous]);
+        } else {
+            return redirect()->route('redaction.rate_lots');
+        }
     }
 
-    public function get_data($image, $ch, $cv)
+    public function get_data($image, $crop = true)
     {
+        
         $file = Storage::get($image);
         $img = Image::make($file);
-        $corte_vertical = $cv;
-        $corte_horizontal = $ch;
-        $x = $corte_vertical;
-        $y = $corte_horizontal;
-        $largura = $img->width() - $corte_vertical;
-        $altura =  $img->height() - $corte_horizontal;
-        $img->crop($largura,  $altura, $x, $y);
+        if ($crop){
+            $x = ceil(env('CROP_IMAGE_LEFT', 0) * $img->width());
+            $y = ceil(env('CROP_IMAGE_TOP', 0) * $img->height());
+            $largura = $img->width() - $x - ceil(env('CROP_IMAGE_RIGHT', 0) * $img->width());
+            $altura =  $img->height() - $y - ceil(env('CROP_IMAGE_BOTTOM', 0) * $img->height());
+            $img->crop($largura,  $altura, $x, $y);
+        }
         $img->resize(1240, null, function ($constraint) {
             $constraint->aspectRatio();
         });

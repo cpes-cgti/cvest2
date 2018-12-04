@@ -37,7 +37,7 @@
                                 @if ($lots->sum->to_do > 0)
                                     <span class="progress-number"><b> {{ round($lots->sum->ready / $lots->sum->to_do * 100, 2) }}%</b></span>
                                     <div class="progress" style="height: 1em;">
-                                        <div class="progress-bar progress-bar-primary" style="width: {{ ceil($lots->sum->ready / $lots->sum->to_do * 100) }}%;"></div>
+                                        <div class="progress-bar progress-bar-primary" style="background-color: #A9D0F5; width: {{ ceil($lots->sum->ready / $lots->sum->to_do * 100) }}%;"></div>
                                     </div>
                                 @else
                                     <span class="progress-number"><b> ---%</b></span>
@@ -69,18 +69,29 @@
                         <td>{{$l->to_do}}</td>
                         <td>{{$l->ready}}</td>
                         <td>
+                            {{-- <table>
+                            <tr>
+                                <td>{{ round($l->ready / $l->to_do * 100, 2) }}%</td>
+                                <td style="width: 90%;">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{ ceil($l->ready / $l->to_do * 100) }}%">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </table> --}}
                             <div class="progress">
-                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{ ceil($l->ready / $l->to_do * 100) }}%">
+                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="background-color: #CEF6D8; width: {{ ceil($l->ready / $l->to_do * 100) }}%;">
                                     @if ($l->ready == 0)
                                     <span style="color: #000; font-weight: bold; margin-left: 1em;">{{ round($l->ready / $l->to_do * 100, 2) }}%</span>
                                     @else
-                                    <span style="color: #FFF; font-weight: bold;">{{ ceil($l->ready / $l->to_do * 100) }}%</span>
+                                    <span style="color: #000; font-weight: bold;">{{ ceil($l->ready / $l->to_do * 100) }}%</span>
                                     @endif
                                 </div>
                             </div>
                         </td>
-                        <td>{{$l->start}}</td>
-                        <td>{{$l->end}}</td>
+                        <td>{{ Carbon\Carbon::parse($l->start)->format('d/m/Y H:i:s') }}</td>
+                        <td>@if ($l->to_do == $l->ready) {{ Carbon\Carbon::parse($l->end)->format('d/m/Y H:i:s') }} @endif</td>
                         <td>
                             <form class="form-inline" >
                                 <div class="btn-group">

@@ -18,7 +18,7 @@ class CreateRedactionsTable extends Migration
             $table->integer('entry')->unsigned()->unique();
             $table->string('file');
             $table->enum('status',
-                ['Digitalizada','Para correção','Corrigida (1x)', 'Corrigida (concluído)', 'Inconsistência', ]
+                ['Digitalizada','Para correção','Corrigida (1x)', 'Corrigida (concluído)', 'Necessita revisão', ]
             )->default('Digitalizada');
             $table->double('final_score', 5, 2)->nullable();
             $table->timestamps();
@@ -32,7 +32,7 @@ class CreateRedactionsTable extends Migration
             $table->integer('lot')->unsigned()->nullable();
             $table->timestamp('start')->nullable();
             $table->timestamp('end')->nullable();
-            $table->timestamp('duration')->nullable();
+            $table->integer('duration')->unsigned()->nullable();
             $table->double('score', 5, 2)->nullable();
             $table->boolean('zero_empty')->default(false);
             $table->boolean('zero_identification')->default(false);
