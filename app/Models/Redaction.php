@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\Corrector;
 use App\Models\Lot;
 
 class Redaction extends Model
 {
-    use SoftDeletes;
 
     protected $fillable = [
         'entry', 'file',
@@ -23,7 +21,7 @@ class Redaction extends Model
 
     public function getFinalScoreAttribute($value)
     {
-        return number_format($value, 2, ",", ".");
+        return is_null($value) ? '' : number_format($value, 2, ",", ".");
     }
 
     public function laratablesStatus()

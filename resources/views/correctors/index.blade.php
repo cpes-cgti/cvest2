@@ -49,9 +49,9 @@
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE')}}
                                 <div class="btn-group">
-                                    <a href="{{ route('corrector.show', $a->id) }}" class="btn btn-default btn-sm" style="color:black"><i class="far fa-eye"></i></a>
-                                    <a href="{{ route('corrector.edit', $a->id) }}" class="btn btn-default btn-sm" style="color: darkgreen"><i class="fas fa-user-edit"></i></a>
-                                    <button type="submit" class="btn btn-default btn-sm form-delete"><i class="fas fa-trash-alt" style="color: darkred"></i></button>
+                                    <abbr title="Visualizar avaliador"><a href="{{ route('corrector.show', $a->id) }}" class="btn btn-default btn-sm" style="color:black"><i class="far fa-eye"></i></a></abbr>
+                                    <abbr title="Modificar avaliador"><a href="{{ route('corrector.edit', $a->id) }}" class="btn btn-default btn-sm" style="color: darkgreen"><i class="fas fa-user-edit"></i></a></abbr>
+                                    <abbr title="Remover avaliador"><button type="submit" class="btn btn-default btn-sm form-delete"><i class="fas fa-trash-alt" style="color: darkred"></i></button></abbr>
                                 </div>
                             </form>
                         </td>

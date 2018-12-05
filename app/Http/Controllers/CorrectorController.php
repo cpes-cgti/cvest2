@@ -38,8 +38,7 @@ class CorrectorController extends Controller
                 $usuario = User::create([
                     'name' => $r->name,
                     'email' => $r->email,
-                    /* 'password' => bcrypt(str_random(10)), */
-                    'password' => bcrypt('123456'),
+                    'password' => bcrypt(str_random(10)),
                 ]);
             } else {
                 $usuario->name = $r->name;
@@ -95,13 +94,15 @@ class CorrectorController extends Controller
         $corrector = Corrector::findOrFail($id);
         DB::beginTransaction();
         try {
-            $corrector->user->delete();
+            $user = $corrector->user;
             $corrector->delete();
+            $user->delete();
             DB::commit();
             return redirect()->route('corrector.index');
         } catch (\Exception $e) {
             DB::rollback();
+            /* return redirect()->route('corrector.index')->with('erro', $e->getMessage()); */
         }
-        return redirect()->route('corrector.index')->with('erro', 'Erro ao remover o avaliador.');
+        return redirect()->route('corrector.index')->with('erro', 'Erro ao remover o avaliador. Se o avaliador possuir redações para correção, não será possível a sua remoção.');
     }
 }

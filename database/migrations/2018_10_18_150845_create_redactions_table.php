@@ -22,7 +22,6 @@ class CreateRedactionsTable extends Migration
             )->default('Digitalizada');
             $table->double('final_score', 5, 2)->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
         // Tabela Pivô - Avaliadores X Redações
         Schema::create('corrector_redaction', function (Blueprint $table) {

@@ -32,15 +32,15 @@
                             <th rowspan="2" style="vertical-align: middle; text-align: center;">NOTA</th>
                         </tr>
                         <tr style="vertical-align: middle;">
-                            <th style="text-align: center;"><abbr title="A - CONVENÇÕES DA ESCRITA">A</abbr></th>
-                            <th style="text-align: center;"><abbr title="B - TIPO E GÊNERO">B</abbr></th>
-                            <th style="text-align: center;"><abbr title="C - TEMA E ARGUMENTAÇÃO">C</abbr></th>
-                            <th style="text-align: center;"><abbr title="D - COESÃO">D</abbr></th>
-                            <th style="text-align: center;"><abbr title="atribuída NOTA ZERO à Redação que: contiver a folha-resposta em branco;">1</abbr></th>
-                            <th style="text-align: center;"><abbr title="atribuída NOTA ZERO à Redação que: contiver a folha-resposta identificada;">2</abbr></th>
-                            <th style="text-align: center;"><abbr title="atribuída NOTA ZERO à Redação que: fugir totalmente ao tema proposto pela Banca de Elaboração;">3</abbr></th>
-                            <th style="text-align: center;"><abbr title="atribuída NOTA ZERO à Redação que: não atender ao número mínimo de linhas;">4</abbr></th>
-                            <th style="text-align: center;"><abbr title="atribuída NOTA ZERO à Redação que: contiver impropérios ou outras formas propositais de anulação;">5</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="A - CONVENÇÕES DA ESCRITA">A</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="B - TIPO E GÊNERO">B</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="C - TEMA E ARGUMENTAÇÃO">C</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="D - COESÃO">D</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="atribuída NOTA ZERO à Redação que: contiver a folha-resposta em branco;">1</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="atribuída NOTA ZERO à Redação que: contiver a folha-resposta identificada;">2</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="atribuída NOTA ZERO à Redação que: fugir totalmente ao tema proposto pela Banca de Elaboração;">3</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="atribuída NOTA ZERO à Redação que: não atender ao número mínimo de linhas;">4</abbr></th>
+                            <th style="text-align: center;"><abbr style="text-decoration:none; border: 0;" title="atribuída NOTA ZERO à Redação que: contiver impropérios ou outras formas propositais de anulação;">5</abbr></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,5 +70,11 @@
                 </h4>
             @endif
         </fieldset>
+        <h4>Legenda: (Atribuir nota zero a redação)</h4>
+        <p style="margin: 0 0 0.1em;"><B>1. </B>atribuída NOTA ZERO à Redação que: contiver a folha-resposta em branco;</p>
+        <p style="margin: 0 0 0.1em;"><B>2. </B>atribuída NOTA ZERO à Redação que: contiver a folha-resposta identificada;</p>
+        <p style="margin: 0 0 0.1em;"><B>3. </B>atribuída NOTA ZERO à Redação que: fugir totalmente ao tema proposto pela Banca de Elaboração;</p>
+        <p style="margin: 0 0 0.1em;"><B>4. </B>atribuída NOTA ZERO à Redação que: não atender ao número mínimo de linhas;</p>
+        <p style="margin: 0 0 0.1em;"><B>5. </B>atribuída NOTA ZERO à Redação que: contiver impropérios ou outras formas propositais de anulação;</p>
     </div>
 </div>

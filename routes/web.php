@@ -15,23 +15,11 @@
 Route::get('/', function () {
     return redirect()->route('admin');
 });
-Route::get('/teste', function () {
-    $files = Storage::files();
-    /*  dd($files); */
-    $file = Storage::get('18203837.JPG');
-    $img = Image::make($file);
-    $corte_vertical = 0;
-    $corte_horizontal = 710;
-    $x = $corte_vertical;
-    $y = $corte_horizontal;
-    $largura = $img->width() - $corte_vertical;
-    $altura =  $img->height() - $corte_horizontal;
-    $img->crop($largura,  $altura, $x, $y);
-    $img_data = $img->encode('data-url');
-    return view('redactions.image', compact('img_data'));
-    $response = Response::make($img->encode('jpeg'));
-    $response->header('Content-Type', 'image/jpeg');
-    return $response;
+Route::get('/admin', function () {
+    return redirect()->route('admin');
+});
+Route::get('/home', function () {
+    return redirect()->route('admin');
 });
 
 /* Rotas de autenticação */

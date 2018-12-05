@@ -6,20 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\Redaction;
 use App\Models\Lot;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Corrector extends Model
 {
-
-    use SoftDeletes;
 
     protected $fillable = [
         'cpf', 'siape','user_id'
     ];
 
-
     public function user(){
-        return $this->belongsTo(User::class)->withTrashed();
+        return $this->belongsTo(User::class);
     }
 
     /* Relacionamentos N:N */

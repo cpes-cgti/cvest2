@@ -95,7 +95,7 @@
                         <td>
                             <form class="form-inline" >
                                 <div class="btn-group">
-                                <a href="{{ route('redaction.rate_lot', $l->lot) }}" class="btn btn-default btn-sm" style="color:black"><i class="fas fa-folder-open"></i></a>
+                                    <abbr title="Abrir lote"><a href="{{ route('redaction.rate_lot', $l->lot) }}" class="btn btn-default btn-sm" style="color:black"><i class="fas fa-folder-open"></i></a></abbr>
                                 </div>
                             </form>
                         </td>
