@@ -33,9 +33,9 @@
                             <i class="fa fa-fw fa-user"></i>
                             <h3 class="box-title">{{ \Auth::user()->name }}</h3>
                             <div class="progress-group">
-                                <span class="progress-text">Redações corrigidas: {{ $lots->sum->ready }} / {{ $lots->sum->to_do }}</span>
+                                <span class="progress-text">Redações corrigidas: {{ number_format($lots->sum->ready, 0, ",", ".")  }} / {{ number_format($lots->sum->to_do, 0, ",", ".")  }}</span>
                                 @if ($lots->sum->to_do > 0)
-                                    <span class="progress-number"><b> {{ round($lots->sum->ready / $lots->sum->to_do * 100, 2) }}%</b></span>
+                                    <span class="progress-number"><b> {{ number_format(round($lots->sum->ready / $lots->sum->to_do * 100, 2), 2, ",", ".")  }}%</b></span>
                                     <div class="progress" style="height: 1em;">
                                         <div class="progress-bar progress-bar-primary" style="background-color: #A9D0F5; width: {{ ceil($lots->sum->ready / $lots->sum->to_do * 100) }}%;"></div>
                                     </div>
@@ -65,9 +65,9 @@
                 <tbody>
                     @foreach ($lots as $l)
                     <tr>
-                        <td>{{$l->lot}}</td>
-                        <td>{{$l->to_do}}</td>
-                        <td>{{$l->ready}}</td>
+                        <td>{{ str_pad($l->lot, 6, "0", STR_PAD_LEFT) }}</td>
+                        <td>{{ number_format($l->to_do, 0, ",", ".") }}</td>
+                        <td>{{ number_format($l->ready, 0, ",", ".") }}</td>
                         <td>
                             {{-- <table>
                             <tr>
@@ -90,8 +90,8 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ $l->start }}</td>
-                        <td>@if ($l->to_do == $l->ready) {{ $l->end }} @endif</td>
+                        <td>{{ ($l->start == null) ? '' : Carbon\Carbon::parse($l->start)->format('d/m/Y H:i:s') }}</td>
+                        <td>@if ($l->to_do == $l->ready) {{ Carbon\Carbon::parse($l->end)->format('d/m/Y H:i:s') }} @endif</td>
                         <td>
                             <form class="form-inline" >
                                 <div class="btn-group">

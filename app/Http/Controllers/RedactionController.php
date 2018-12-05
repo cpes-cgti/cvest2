@@ -23,12 +23,13 @@ class RedactionController extends Controller
             'process_import', 
             'for_correction', 
             'process_for_correction',
+            'show_admin',
         );
         $corretor = array(
             'rate_lots', 
             'rate_lot', 
             'rate', 
-            'rate_save', 
+            'rate_save',  
         );
         $this->middleware(['auth', 'can:level4'])->only($level4);
         $this->middleware(['auth', 'can:level2'])->except(array_merge($level4, $corretor));
@@ -52,6 +53,19 @@ class RedactionController extends Controller
         $img = $redaction->file;
         $img_data = $this->get_data($img);
         return view('redactions.image', compact('img_data'));
+    }
+    
+    public function details($id)
+    {
+        $redaction = Redaction::findOrFail($id);
+        $corrections = DB::table('corrector_redaction')
+            ->join('correctors', 'correctors.id', '=', 'corrector_redaction.corrector_id')
+            ->join('users', 'users.id', '=', 'correctors.user_id')
+            ->where('corrector_redaction.redaction_id', $id)
+            ->whereNotNull('corrector_redaction.score')
+            ->select('corrector_redaction.*', 'users.name')
+            ->get();
+        return view('redactions.details', compact('corrections', 'redaction'));
     }
 
     public function show_admin($id)

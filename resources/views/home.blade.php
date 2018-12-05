@@ -23,11 +23,11 @@
                             <div class="info-box">
                                 <span class="info-box-icon bg-green"><i class="fa fa-fw fa-file-signature "></i></span>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Você possui <b>{{ $corrector->to_do }}</b> redações para corrigir.</span>
+                                    <span class="info-box-text">Você possui <b>{{ number_format($corrector->to_do, 0, ",", ".") }}</b> redações para corrigir.</span>
                                     
                                     <div class="progress-group">
-                                        <span class="progress-text">Redações corrigidas: {{ $corrector->ready }}</span>
-                                        <span class="progress-number"><b> {{ ceil($corrector->ready / $corrector->to_do * 100) }}%</b></span>
+                                        <span class="progress-text">Redações corrigidas: {{ number_format($corrector->ready, 0, ",", ".") }}</span>
+                                        <span class="progress-number"><b> {{ round($corrector->ready / $corrector->to_do * 100, 2) }}%</b></span>
                                         <div class="progress" style="height: 1em;">
                                             <div class="progress-bar progress-bar-green" style="width: {{ ceil($corrector->ready / $corrector->to_do * 100) }}%; background-color: #00a65a;"></div>
                                         </div>
@@ -58,12 +58,12 @@
                                     <ul class="chart-legend clearfix">
                                         <li>
                                             <i class="fas fa-square" style="color: #000;"></i> 
-                                                Total: {{ $redactions->sum->qtde }} ( 100% )
+                                                Total: {{ number_format($redactions->sum->qtde, 0, ",", ".") }} ( 100% )
                                         </li>
                                         @foreach ($redactions as $r) 
                                             <li>
                                                 <i class="fas fa-square" style="color: {{ $colors[$r->status] }};"></i> 
-                                                {{ $r->status }}: {{ $r->qtde }} <br>( <b>{{ round($r->qtde / $redactions->sum->qtde * 100, 2) }}% </b> )
+                                                {{ $r->status }}: {{ number_format($r->qtde, 0, ",", ".") }} <br>( <b>{{ number_format(round($r->qtde / $redactions->sum->qtde * 100, 2), 2, ",", ".") }}% </b> )
                                             </li>
                                         @endforeach
                                     </ul>
@@ -81,9 +81,9 @@
                         <i class="fa fa-fw fa-users"></i>
                         <h3 class="box-title">Avaliadores:</h3>
                         <div class="progress-group">
-                            <span class="progress-text">Redações corrigidas: {{ $correctors->sum->ready }} / {{ $correctors->sum->to_do }}</span>
+                            <span class="progress-text">Redações corrigidas: {{ number_format($correctors->sum->ready, 0, ",", ".") }} / {{ number_format($correctors->sum->to_do, 0, ",", ".") }}</span>
                             @if ($correctors->sum->to_do > 0)
-                                <span class="progress-number"><b> {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%</b></span>
+                                <span class="progress-number"><b> {{ number_format(round($correctors->sum->ready / $correctors->sum->to_do * 100, 2), 2, ",", ".") }}%</b></span>
                                 <div class="progress" style="height: 1em;">
                                     <div class="progress-bar progress-bar-primary" style="width: {{ ceil($correctors->sum->ready / $correctors->sum->to_do * 100) }}%;"></div>
                                 </div>
@@ -106,8 +106,8 @@
                             <div class="box box-solid">
                                 <h4><i class="fa fa-fw fa-user"></i>{{ $c->name }}</h4>
                                 <div class="progress-group">
-                                    <span class="progress-text">Redações corrigidas: {{ $c->ready }} / {{ $c->to_do }}</span>
-                                    <span class="progress-number"><b> {{ ceil($c->ready / $c->to_do * 100) }}%</b></span>
+                                    <span class="progress-text">Redações corrigidas: {{ number_format($c->ready, 0, ",", ".") }} / {{ number_format($c->to_do, 0, ",", ".") }}</span>
+                                    <span class="progress-number"><b> {{ number_format(round($c->ready / $c->to_do * 100, 2),2,",",".") }}%</b></span>
                                     <div class="progress" style="height: 1em;">
                                         <div class="progress-bar progress-bar-primary progress-bar-striped" style="width: {{ ceil($c->ready / $c->to_do * 100) }}%; "></div>
                                     </div>

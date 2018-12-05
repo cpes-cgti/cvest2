@@ -16,6 +16,16 @@ class Redaction extends Model
         'entry', 'file',
     ];
 
+    public function getIdAttribute($value)
+    {
+        return str_pad($value, 6, "0", STR_PAD_LEFT);
+    }
+
+    public function getFinalScoreAttribute($value)
+    {
+        return number_format($value, 2, ",", ".");
+    }
+
     public function laratablesStatus()
     {
         $type = 'default';

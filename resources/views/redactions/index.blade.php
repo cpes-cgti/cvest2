@@ -69,8 +69,7 @@
                 
                 </div>
                 <div class="modal-footer">
-                    {{-- <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="delete-btn">Confirmar</button> --}}
+                    <a class="btn btn-danger" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i> Fechar</a>
                 </div>
             </div>
         </div>

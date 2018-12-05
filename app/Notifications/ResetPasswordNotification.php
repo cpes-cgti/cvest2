@@ -42,11 +42,12 @@ class ResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+                ->subject('Alterar Senha - ' . env('APP_NAME', 'CVEST Redações 2019.1'))
                 ->greeting('Olá')
                 ->line('Você está recebendo este e-mail porque recebemos um pedido de redefinição de senha para sua conta.')
                 ->action('Redefinir senha', url(config('app.url').route('password.reset', $this->token, false)))
                 ->line('Se você não solicitou uma redefinição de senha, ignore este email.')
-                ->salutation('Saudações,');
+                ->salutation('Atenciosamente,');
     
     }
 

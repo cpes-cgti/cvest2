@@ -106,16 +106,16 @@
                 <tbody>
                     @foreach ($lots as $l)
                     <tr>
-                        <td>{{$l->lot}}</td>
-                        <td>{{$l->lot_count}}</td>
-                        <td>{{$l->ready}}</td>
+                        <td>{{ str_pad($l->lot, 6, "0", STR_PAD_LEFT) }}</td>
+                        <td>{{ number_format($l->lot_count, 0, ",", ".") }}</td>
+                        <td>{{ number_format($l->ready, 0, ",", ".") }}</td>
                         <td>
                             <div class="progress">
-                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{ ceil($l->ready / $l->lot_count * 100) }}%">
+                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="background-color: #CEF6D8; width: {{ ceil($l->ready / $l->lot_count * 100) }}%">
                                     @if ($l->ready == 0)
                                     <span style="color: #000; font-weight: bold; margin-left: 1em;">0%</span>
                                     @else
-                                    <span style="color: #FFF; font-weight: bold;">{{ ceil($l->ready / $l->lot_count * 100) }}%</span>
+                                    <span style="color: #000; font-weight: bold;">{{ ceil($l->ready / $l->lot_count * 100) }}%</span>
                                     @endif
                                 </div>
                             </div>
