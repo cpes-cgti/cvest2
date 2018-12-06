@@ -5,7 +5,7 @@
 @stop
 
 @section('content_header')
-    <h1>Redações para corrigir:</h1>
+    <h1>Redações para corrigir</h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin') }}"><i class="fas fa-home"></i></a></li>
         <li><a href="{{ route('redaction.index') }}">Redações</a></li>

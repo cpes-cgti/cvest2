@@ -36,7 +36,8 @@ class User extends Authenticatable
 
     public function corrector()
     {
-        return $this->belongsTo('App\Models\Corrector', 'id');
+        /* return $this->belongsTo('App\Models\Corrector', 'id'); */
+        return $this->hasOne('App\Models\Corrector');
     }
 
 }

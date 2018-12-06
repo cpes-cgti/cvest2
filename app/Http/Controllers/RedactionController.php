@@ -469,7 +469,7 @@ class RedactionController extends Controller
         if ($qtde_corrections == 1){
             $redaction->status = 'Corrigida (1x)';
         } elseif ($qtde_corrections == 2){
-            if (abs($corrections->first()->score - $corrections->last()->score) >= 3){
+            if (abs($corrections->first()->score - $corrections->last()->score) >= env('MAX_DIFF_CORRECTIONS', 3)){
                 $redaction->status = 'Necessita revisão';
             } else {
                 $redaction->status = 'Corrigida (concluído)';
