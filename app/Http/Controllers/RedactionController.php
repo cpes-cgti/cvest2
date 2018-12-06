@@ -23,7 +23,6 @@ class RedactionController extends Controller
             'process_import', 
             'for_correction', 
             'process_for_correction',
-            'show_admin',
         );
         $corretor = array(
             'rate_lots', 
