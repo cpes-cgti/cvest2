@@ -118,6 +118,11 @@ return [
             'route'  => 'admin',
         ],
         [
+            'text' => 'Alterar senha',
+            'icon' => 'key',
+            'route'  => 'password.change',
+        ],
+        [
             'text' => 'Avaliadores',
             'icon' => 'users',
             'can' => 'level2',

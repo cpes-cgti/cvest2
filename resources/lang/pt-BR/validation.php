@@ -117,9 +117,12 @@ return [
     */
 
     'attributes' => [
-        'name'             => 'nome',
-        'password'         => 'senha',
-        'correctors'         => 'avaliadores',
+        'name'                      => 'nome',
+        'password'                  => 'senha',
+        'correctors'                => 'avaliadores',
+        'old_password'              => 'senha atual',
+        'new_password'              => 'nova senha',
+        'password_confirmation'     => 'confirmação da nova senha',
     ],
 
 ];

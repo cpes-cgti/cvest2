@@ -30,6 +30,8 @@ Route::post('/senha/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')-
 Route::get('/senha/recuperar', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('/senha/recuperar', 'Auth\ResetPasswordController@reset');
 Route::get('/senha/recuperar/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::get('/senha/alterar', 'HomeController@change_password')->name('password.change');
+Route::put('/senha/alterar', 'HomeController@update_password');
 
 /* Rotas da área administrativa */
 Route::get('/admin/resumo', 'HomeController@index')->name('admin');

@@ -58,6 +58,34 @@
                 <div class="navbar-custom-menu">
 
                     <ul class="nav navbar-nav">
+
+                        <li class="dropdown user user-menu">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                <i style="font-size: 1.2em; color: white" class="fas fa-user-circle"></i>
+                                <span class="hidden-xs">{{ Auth::user()->name }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- Menu Header -->
+                                <li class="user-header">
+                                    <i style="font-size: 6em; color: white" class="fas fa-user-circle"></i>
+                            
+                                    <p>
+                                        {{ Auth::user()->name }}
+                                        <small>{{ Auth::user()->email }}</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        
+                                    </div>
+                                    <div class="pull-right">
+                                    <a href="{{ route('password.change') }}" class="btn btn-default btn-flat">Alterar senha</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li>
                             @if(config('adminlte.logout_method') == 'GET' || !config('adminlte.logout_method') && version_compare(\Illuminate\Foundation\Application::VERSION, '5.3.0', '<'))
                                 <a href="{{ url(config('adminlte.logout_url', 'auth/logout')) }}">

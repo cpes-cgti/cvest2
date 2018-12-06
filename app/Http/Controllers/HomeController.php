@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Redaction;
 use App\Models\Corrector;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use App\Rules\OldPassword;
 
 class HomeController extends Controller
 {
@@ -69,4 +71,22 @@ class HomeController extends Controller
 
         return view('home', compact('redactions', 'colors', 'isCorrector', 'correctors', 'corrector'));
     }
+
+    public function change_password()
+    {
+        return view('password');
+    }
+
+    public function update_password(Request $request)
+    {
+        $validatedData = $request->validate([
+            'old_password' => ['required', 'string', 'min:6', new OldPassword],
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+        $user = \Auth::user();
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return redirect()->route('password.change')->with('sucesso', 'Sua senha foi alterada com sucesso.');
+    }
+
 }
