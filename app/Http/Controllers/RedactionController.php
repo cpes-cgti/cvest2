@@ -372,6 +372,9 @@ class RedactionController extends Controller
             'competenceC' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5|in:0.0,0.5,1.0,1.5,2.0,2.5',
             'competenceD' => 'required_without_all:zerar_1,zerar_2,zerar_3,zerar_4,zerar_5|in:0.0,0.5,1.0,1.5,2.0,2.5',
         ]);
+        
+        //Bloqueio de modificações
+        if (env('BLOCK_UPDATE_CORRECTIONS', false)) abort(403);
 
         $redactions = DB::table('corrector_redaction')
             ->where('corrector_redaction.lot', $lot)

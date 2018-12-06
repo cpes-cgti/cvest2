@@ -36,7 +36,7 @@
             </div>
             {{-- <button disabled="disabled"></button> --}}
             
-            
+        
             
         </div>
         <div class="box-body" style="min-height: 70vh">
@@ -49,93 +49,101 @@
             @endif
             <div class="row">
                 <div class="col-md-4">
-                    <form method="post" action="{{ route('redaction.rate_save', [$lot, $id]) }}" enctype="multipart/form-data" id="form_rate">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="action" id="action">
-                        <input type="hidden" name="start" value="{{ $start }}">
-                        <input type="hidden" id="isUpdated" value="0">
-                        <label>Atribuir nota <b>ZERO</b> à redação:</label>
-                        <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_1" name="zerar_1" type="checkbox" @if($r->zero_empty) checked @endif> Folha resposta em branco.</span>
-                        <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_2" name="zerar_2" type="checkbox" @if($r->zero_identification) checked @endif> Folha resposta identificada pelo candidato(a).</span>
-                        <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_3" name="zerar_3" type="checkbox" @if($r->zero_theme) checked @endif> Fuga total ao tema proposto.</span>
-                        <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_4" name="zerar_4" type="checkbox" @if($r->zero_lines) checked @endif> Não atende ao número mínimo de linhas.</span>
-                        <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_5" name="zerar_5" type="checkbox" @if($r->zero_offensive_content) checked @endif> Presença de conteúdo impróprio/ofensivo.</span>
-                        <br>
-                        <div class="avaliar_competence">
-                            <label>Avaliar competências exigidas:</label>
-                            <table id="tb_competence" class="table table-bordered" 
-                                style="text-align: center; 
-                                    {{ ($errors->has('competenceA') || 
+                    @if (env('BLOCK_UPDATE_CORRECTIONS', false))
+                        <div class="callout callout-warning">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Atenção</h4>
+                            <p>No momento, mofificações não são permitidas.</p>
+                            <p>O prazo para avaliar as redações está encerrado ou sistema está em manutenção.</p>
+                        </div>
+                    @else
+                        <form method="post" action="{{ route('redaction.rate_save', [$lot, $id]) }}" enctype="multipart/form-data" id="form_rate">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="action" id="action">
+                            <input type="hidden" name="start" value="{{ $start }}">
+                            <input type="hidden" id="isUpdated" value="0">
+                            <label>Atribuir nota <b>ZERO</b> à redação:</label>
+                            <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_1" name="zerar_1" type="checkbox" @if($r->zero_empty) checked @endif> Folha resposta em branco.</span>
+                            <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_2" name="zerar_2" type="checkbox" @if($r->zero_identification) checked @endif> Folha resposta identificada pelo candidato(a).</span>
+                            <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_3" name="zerar_3" type="checkbox" @if($r->zero_theme) checked @endif> Fuga total ao tema proposto.</span>
+                            <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_4" name="zerar_4" type="checkbox" @if($r->zero_lines) checked @endif> Não atende ao número mínimo de linhas.</span>
+                            <span style="margin: 0.8em 0; display: block;"><input id="chk_zerar_5" name="zerar_5" type="checkbox" @if($r->zero_offensive_content) checked @endif> Presença de conteúdo impróprio/ofensivo.</span>
+                            <br>
+                            <div class="avaliar_competence">
+                                <label>Avaliar competências exigidas:</label>
+                                <table id="tb_competence" class="table table-bordered" 
+                                    style="text-align: center; 
+                                        {{ ($errors->has('competenceA') || 
+                                            $errors->has('competenceB') || 
+                                            $errors->has('competenceC') || 
+                                            $errors->has('competenceD') ) ? 'border: 2px solid red;' : '' }}
+                                        ">
+                                    <tr>
+                                        <td><b>NÍVEL</b></td>
+                                        <td><b>0</b></td>
+                                        <td><b>I</b></td>
+                                        <td><b>II</b></td>
+                                        <td><b>III</b></td>
+                                        <td><b>IV</b></td>
+                                        <td><b>V</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>A</b></td>
+                                        <td><input type="radio" name="competenceA" value="0.0" @if(old('competenceA') == '0.0' || $r->competenceA == '0.0') checked @endif> 0,0</td>
+                                        <td><input type="radio" name="competenceA" value="0.5" @if(old('competenceA') == '0.5' || $r->competenceA == '0.5') checked @endif> 0,5</td>
+                                        <td><input type="radio" name="competenceA" value="1.0" @if(old('competenceA') == '1.0' || $r->competenceA == '1.0') checked @endif> 1,0</td>
+                                        <td><input type="radio" name="competenceA" value="1.5" @if(old('competenceA') == '1.5' || $r->competenceA == '1.5') checked @endif> 1,5</td>
+                                        <td><input type="radio" name="competenceA" value="2.0" @if(old('competenceA') == '2.0' || $r->competenceA == '2.0') checked @endif> 2,0</td>
+                                        <td><input type="radio" name="competenceA" value="2.5" @if(old('competenceA') == '2.5' || $r->competenceA == '2.5') checked @endif> 2,5</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>B</b></td>
+                                        <td><input type="radio" name="competenceB" value="0.0" @if(old('competenceB') == '0.0' || $r->competenceB == '0.0') checked @endif> 0,0</td>
+                                        <td><input type="radio" name="competenceB" value="0.5" @if(old('competenceB') == '0.5' || $r->competenceB == '0.5') checked @endif> 0,5</td>
+                                        <td><input type="radio" name="competenceB" value="1.0" @if(old('competenceB') == '1.0' || $r->competenceB == '1.0') checked @endif> 1,0</td>
+                                        <td><input type="radio" name="competenceB" value="1.5" @if(old('competenceB') == '1.5' || $r->competenceB == '1.5') checked @endif> 1,5</td>
+                                        <td><input type="radio" name="competenceB" value="2.0" @if(old('competenceB') == '2.0' || $r->competenceB == '2.0') checked @endif> 2,0</td>
+                                        <td><input type="radio" name="competenceB" value="2.5" @if(old('competenceB') == '2.5' || $r->competenceB == '2.5') checked @endif> 2,5</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>C</b></td>
+                                        <td><input type="radio" name="competenceC" value="0.0" @if(old('competenceC') == '0.0' || $r->competenceC == '0.0') checked @endif> 0,0</td>
+                                        <td><input type="radio" name="competenceC" value="0.5" @if(old('competenceC') == '0.5' || $r->competenceC == '0.5') checked @endif> 0,5</td>
+                                        <td><input type="radio" name="competenceC" value="1.0" @if(old('competenceC') == '1.0' || $r->competenceC == '1.0') checked @endif> 1,0</td>
+                                        <td><input type="radio" name="competenceC" value="1.5" @if(old('competenceC') == '1.5' || $r->competenceC == '1.5') checked @endif> 1,5</td>
+                                        <td><input type="radio" name="competenceC" value="2.0" @if(old('competenceC') == '2.0' || $r->competenceC == '2.0') checked @endif> 2,0</td>
+                                        <td><input type="radio" name="competenceC" value="2.5" @if(old('competenceC') == '2.5' || $r->competenceC == '2.5') checked @endif> 2,5</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>D</b></td>
+                                        <td><input type="radio" name="competenceD" value="0.0" @if(old('competenceD') == '0.0' || $r->competenceD == '0.0') checked @endif> 0,0</td>
+                                        <td><input type="radio" name="competenceD" value="0.5" @if(old('competenceD') == '0.5' || $r->competenceD == '0.5') checked @endif> 0,5</td>
+                                        <td><input type="radio" name="competenceD" value="1.0" @if(old('competenceD') == '1.0' || $r->competenceD == '1.0') checked @endif> 1,0</td>
+                                        <td><input type="radio" name="competenceD" value="1.5" @if(old('competenceD') == '1.5' || $r->competenceD == '1.5') checked @endif> 1,5</td>
+                                        <td><input type="radio" name="competenceD" value="2.0" @if(old('competenceD') == '2.0' || $r->competenceD == '2.0') checked @endif> 2,0</td>
+                                        <td><input type="radio" name="competenceD" value="2.5" @if(old('competenceD') == '2.5' || $r->competenceD == '2.5') checked @endif> 2,5</td>
+                                    </tr>
+                                    @if ($errors->has('competenceA') || 
                                         $errors->has('competenceB') || 
                                         $errors->has('competenceC') || 
-                                        $errors->has('competenceD') ) ? 'border: 2px solid red;' : '' }}
-                                    ">
-                                <tr>
-                                    <td><b>NÍVEL</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>I</b></td>
-                                    <td><b>II</b></td>
-                                    <td><b>III</b></td>
-                                    <td><b>IV</b></td>
-                                    <td><b>V</b></td>
-                                </tr>
-                                <tr>
-                                    <td><b>A</b></td>
-                                    <td><input type="radio" name="competenceA" value="0.0" @if(old('competenceA') == '0.0' || $r->competenceA == '0.0') checked @endif> 0,0</td>
-                                    <td><input type="radio" name="competenceA" value="0.5" @if(old('competenceA') == '0.5' || $r->competenceA == '0.5') checked @endif> 0,5</td>
-                                    <td><input type="radio" name="competenceA" value="1.0" @if(old('competenceA') == '1.0' || $r->competenceA == '1.0') checked @endif> 1,0</td>
-                                    <td><input type="radio" name="competenceA" value="1.5" @if(old('competenceA') == '1.5' || $r->competenceA == '1.5') checked @endif> 1,5</td>
-                                    <td><input type="radio" name="competenceA" value="2.0" @if(old('competenceA') == '2.0' || $r->competenceA == '2.0') checked @endif> 2,0</td>
-                                    <td><input type="radio" name="competenceA" value="2.5" @if(old('competenceA') == '2.5' || $r->competenceA == '2.5') checked @endif> 2,5</td>
-                                </tr>
-                                <tr>
-                                    <td><b>B</b></td>
-                                    <td><input type="radio" name="competenceB" value="0.0" @if(old('competenceB') == '0.0' || $r->competenceB == '0.0') checked @endif> 0,0</td>
-                                    <td><input type="radio" name="competenceB" value="0.5" @if(old('competenceB') == '0.5' || $r->competenceB == '0.5') checked @endif> 0,5</td>
-                                    <td><input type="radio" name="competenceB" value="1.0" @if(old('competenceB') == '1.0' || $r->competenceB == '1.0') checked @endif> 1,0</td>
-                                    <td><input type="radio" name="competenceB" value="1.5" @if(old('competenceB') == '1.5' || $r->competenceB == '1.5') checked @endif> 1,5</td>
-                                    <td><input type="radio" name="competenceB" value="2.0" @if(old('competenceB') == '2.0' || $r->competenceB == '2.0') checked @endif> 2,0</td>
-                                    <td><input type="radio" name="competenceB" value="2.5" @if(old('competenceB') == '2.5' || $r->competenceB == '2.5') checked @endif> 2,5</td>
-                                </tr>
-                                <tr>
-                                    <td><b>C</b></td>
-                                    <td><input type="radio" name="competenceC" value="0.0" @if(old('competenceC') == '0.0' || $r->competenceC == '0.0') checked @endif> 0,0</td>
-                                    <td><input type="radio" name="competenceC" value="0.5" @if(old('competenceC') == '0.5' || $r->competenceC == '0.5') checked @endif> 0,5</td>
-                                    <td><input type="radio" name="competenceC" value="1.0" @if(old('competenceC') == '1.0' || $r->competenceC == '1.0') checked @endif> 1,0</td>
-                                    <td><input type="radio" name="competenceC" value="1.5" @if(old('competenceC') == '1.5' || $r->competenceC == '1.5') checked @endif> 1,5</td>
-                                    <td><input type="radio" name="competenceC" value="2.0" @if(old('competenceC') == '2.0' || $r->competenceC == '2.0') checked @endif> 2,0</td>
-                                    <td><input type="radio" name="competenceC" value="2.5" @if(old('competenceC') == '2.5' || $r->competenceC == '2.5') checked @endif> 2,5</td>
-                                </tr>
-                                <tr>
-                                    <td><b>D</b></td>
-                                    <td><input type="radio" name="competenceD" value="0.0" @if(old('competenceD') == '0.0' || $r->competenceD == '0.0') checked @endif> 0,0</td>
-                                    <td><input type="radio" name="competenceD" value="0.5" @if(old('competenceD') == '0.5' || $r->competenceD == '0.5') checked @endif> 0,5</td>
-                                    <td><input type="radio" name="competenceD" value="1.0" @if(old('competenceD') == '1.0' || $r->competenceD == '1.0') checked @endif> 1,0</td>
-                                    <td><input type="radio" name="competenceD" value="1.5" @if(old('competenceD') == '1.5' || $r->competenceD == '1.5') checked @endif> 1,5</td>
-                                    <td><input type="radio" name="competenceD" value="2.0" @if(old('competenceD') == '2.0' || $r->competenceD == '2.0') checked @endif> 2,0</td>
-                                    <td><input type="radio" name="competenceD" value="2.5" @if(old('competenceD') == '2.5' || $r->competenceD == '2.5') checked @endif> 2,5</td>
-                                </tr>
-                                @if ($errors->has('competenceA') || 
-                                    $errors->has('competenceB') || 
-                                    $errors->has('competenceC') || 
-                                    $errors->has('competenceD') )
-                                    <p class="text-red">Deve ser atribuído uma nota para cada competência avaliada.</p>
-                                @endif
-                            </table>
-                        </div>
-                        <label for="note">Observações:</label>
-                        <textarea class="form-control" name="note" rows="5">{{$r->note}}</textarea>
-                        <div class="avaliar_competence">
-                            <h5>A - Convenções da escrita</h5>
-                            <p>Avaliação quanto ao domínio das convenções e normas do sistema de escrita formal da Língua Portuguesa.</p>
-                            <h5>B - Tipo e gênero</h5>
-                            <p>Avaliação quanto à produção de texto dissertativo-argumentativo em prosa, bem como quanto à mobilização de conhecimentos relativos aos limites estruturais do gênero.</p>
-                            <h5>C - Tema e argumentação</h5>
-                            <p>Avaliação quanto ao desenvolvimento de um texto com abordagem pertinente à proposta temática, e à apresentação de argumentos em defesa de um ponto de vista.</p>
-                            <h5>D - Coesão</h5>
-                            <p>Avaliação quanto a utilização de mecanismos linguísticos para construir texto coeso e significativo.</p>
-                        </div>
-                    </form>
+                                        $errors->has('competenceD') )
+                                        <p class="text-red">Deve ser atribuído uma nota para cada competência avaliada.</p>
+                                    @endif
+                                </table>
+                            </div>
+                            <label for="note">Observações:</label>
+                            <textarea class="form-control" name="note" rows="5">{{$r->note}}</textarea>
+                            <div class="avaliar_competence">
+                                <h5>A - Convenções da escrita</h5>
+                                <p>Avaliação quanto ao domínio das convenções e normas do sistema de escrita formal da Língua Portuguesa.</p>
+                                <h5>B - Tipo e gênero</h5>
+                                <p>Avaliação quanto à produção de texto dissertativo-argumentativo em prosa, bem como quanto à mobilização de conhecimentos relativos aos limites estruturais do gênero.</p>
+                                <h5>C - Tema e argumentação</h5>
+                                <p>Avaliação quanto ao desenvolvimento de um texto com abordagem pertinente à proposta temática, e à apresentação de argumentos em defesa de um ponto de vista.</p>
+                                <h5>D - Coesão</h5>
+                                <p>Avaliação quanto a utilização de mecanismos linguísticos para construir texto coeso e significativo.</p>
+                            </div>
+                        </form>
+                    @endif
                 </div>
                 <div class="col-md-8">
                     <div class="box box-solid">
