@@ -82,6 +82,7 @@ class RedactionController extends Controller
 
     public function process_import()
     {
+        set_time_limit(0);
         $files = Storage::files();
         $extensions = array("JPG", "PNG", "GIF");
         foreach ($files as $file) {
