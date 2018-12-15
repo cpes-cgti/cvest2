@@ -21,6 +21,10 @@ Route::get('/admin', function () {
 Route::get('/home', function () {
     return redirect()->route('admin');
 });
+Route::get('/ip', function () {
+    $ip_address = $_SERVER['REMOTE_ADDR'];
+    dd($ip_address);
+});
 
 /* Rotas de autenticação */
 Route::get('/entrar', 'Auth\LoginController@showLoginForm')->name('login');
