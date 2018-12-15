@@ -477,6 +477,14 @@ class RedactionController extends Controller
             } else {
                 $redaction->status = 'Corrigida (concluído)';
             }
+            if ($corrections->first()->zero_empty != $corrections->last()->zero_empty
+                || $corrections->first()->zero_identification != $corrections->last()->zero_identification
+                || $corrections->first()->zero_theme != $corrections->last()->zero_theme
+                || $corrections->first()->zero_lines != $corrections->last()->zero_lines
+                || $corrections->first()->zero_offensive_content != $corrections->last()->zero_offensive_content
+            ){
+                $redaction->status = 'Necessita revisão';
+            }
         }
         $redaction->final_score = $avg_score;
         $redaction->save();

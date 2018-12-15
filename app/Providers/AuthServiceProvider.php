@@ -34,15 +34,15 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('level2', function ($user) {
-            return $user->profile > 1 ;
+            return $user->profile > 1;
         });
 
         Gate::define('level1', function ($user) {
-            return $user->profile > 0 ;
+            return $user->profile > 0;
         });
 
         Gate::define('corrector', function ($user) {
-            return $user->corrector != null ;
+            return $user->corrector != null;
         });
 
     }

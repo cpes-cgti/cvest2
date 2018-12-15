@@ -24,7 +24,6 @@
                             <p class="login-box-msg">{{ trans('adminlte::adminlte.login_message') }}</p>
                             <form action="{{ url(config('adminlte.login_url', 'login')) }}" method="post">
                                 {!! csrf_field() !!}
-
                                 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
                                     <input type="email" name="email" class="form-control" value="{{ old('email') }}"
                                         placeholder="{{ trans('adminlte::adminlte.email') }}">
@@ -45,6 +44,13 @@
                                         </span>
                                     @endif
                                 </div>
+                                @if ($errors->has('ip'))
+                                    <div class="alert alert-danger alert-dismissible">
+                                        {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+                                        <h4><i class="icon fas fa-ban"></i> Acesso negado!</h4>
+                                        {{ $errors->first('ip') }}
+                                    </div>
+                                @endif
                                 <div class="row">
                                     <div class="col-xs-8">
                                         <div class="checkbox icheck">

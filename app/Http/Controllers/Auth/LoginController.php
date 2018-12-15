@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use App\Rules\ValidIP;
+use Validator;
 
 class LoginController extends Controller
 {
@@ -35,5 +38,17 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    } 
+
+    protected function validateLogin(Request $request)
+    {
+        $data = $request->all();
+        $data['ip'] = $_SERVER['REMOTE_ADDR'];
+        Validator::make($data, [
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'ip' => [new ValidIP]
+        ])->validate();
     }
+
 }
