@@ -188,7 +188,7 @@ class RedactionController extends Controller
             $redactions = $redactions->concat($redactions);
             $qtde_corrections = $redactions->count();
             $qtde_per_correctors = ceil($qtde_corrections/$qtde_correctors);
-            $max_lot = 30;
+            $max_lot = env('LOT_SIZE', '50') * 1;
             $cont = 1;
             $i = 0;
             $lot = DB::table('corrector_redaction')->max('lot') + 1;
@@ -231,8 +231,8 @@ class RedactionController extends Controller
                         } else {
                             $lot_size = DB::table('corrector_redaction')
                             ->where('lot', $lot)->count('id');
-                            if ($lot_size < 30){
-                                // Se o lote possuir menos de 30, atribui a redação ao avaliador neste lote
+                            if ($lot_size < $max_lot){
+                                // Se o lote possuir menos que o máximo permitido, atribui a redação ao avaliador neste lote
                                 $r->correctors()->attach($correctors[$i],['lot' => $lot]);
                             } else {
                                 // Se o lote estiver cheio, cria um lote e atribui a redação ao avaliador
