@@ -158,6 +158,12 @@ return [
             'can' => 'corrector',
             'route'  => 'redaction.rate_lots',
         ],
+        [
+            'text' => 'Procurar redação',
+            'icon' => 'search',
+            'can' => 'corrector',
+            'route'  => 'redaction.search',
+        ],
     ],
 
     /*

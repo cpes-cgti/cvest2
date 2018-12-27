@@ -45,6 +45,8 @@ Route::get('/admin/corrigir_redacoes', 'RedactionController@rate_lots')->name('r
 Route::get('/admin/corrigir_redacoes/{lot}', 'RedactionController@rate_lot')->name('redaction.rate_lot');
 Route::get('/admin/corrigir_redacoes/{lot}/{id}', 'RedactionController@rate')->name('redaction.rate');
 Route::post('/admin/corrigir_redacoes/{lot}/{id}', 'RedactionController@rate_save')->name('redaction.rate_save');
+Route::get('/admin/localizar_redacao', 'RedactionController@search')->name('redaction.search');
+Route::post('/admin/localizar_redacao', 'RedactionController@find')->name('redaction.find');
 
 /* Rotas do CRUD de avaliadores */
 Route::get('/admin/avaliadores', 'CorrectorController@index')->name('corrector.index');

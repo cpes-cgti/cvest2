@@ -28,7 +28,9 @@ class RedactionController extends Controller
             'rate_lots', 
             'rate_lot', 
             'rate', 
-            'rate_save',  
+            'rate_save', 
+            'search',
+            'find', 
         );
         $this->middleware(['auth', 'can:level4'])->only($level4);
         $this->middleware(['auth', 'can:level2'])->except(array_merge($level4, $corretor));
@@ -178,6 +180,7 @@ class RedactionController extends Controller
             $qtde_redactions = $redactions->count();
             $redactions = Redaction::has('correctors', 1)->where('status', 'Para correção')->get();
             $qtde_redactions += $redactions->count();
+            
             if ($qtde_redactions < 1){
                 return redirect()->route('redaction.allocate')
                     ->with('erro', 'Não foi possível distribuir as redações. Não existem redações para distribuir ou todas já estão atribuídas aos avaliadores.');
@@ -520,5 +523,24 @@ class RedactionController extends Controller
         return $img_data;
     }
 
+    public function search()
+    {
+        return view('redactions.search');
+    }
+
+    public function find(Request $request)
+    {
+        $corrector = Corrector::where('user_id', \Auth::user()->id)->first();
+        $redaction = DB::table('corrector_redaction')
+        ->where('corrector_redaction.redaction_id', $request->id_redacao)
+        ->where('corrector_redaction.corrector_id', $corrector->id)
+        ->get()->first();
+        if ( $redaction != null) {
+            $lot = $redaction->lot;
+            $id = $redaction->id;
+            return redirect()->route('redaction.rate', [$lot, $id]);
+        }
+        return redirect()->route('redaction.search')->with('erro', 'Redação não localizada.');
+    }
 
 }
